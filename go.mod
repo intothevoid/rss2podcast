@@ -2,7 +2,10 @@ module github.com/intothevoid/rss2podcast
 
 go 1.22.0
 
-require github.com/mmcdole/gofeed v1.3.0
+require (
+	github.com/mmcdole/gofeed v1.3.0
+	gopkg.in/yaml.v2 v2.4.0
+)
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
