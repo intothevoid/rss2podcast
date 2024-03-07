@@ -13,7 +13,12 @@ type Config struct {
 }
 
 func LoadConfig() (*Config, error) {
-	f, err := os.Open("config.yaml")
+	configPath := os.Getenv("RSS2PODCAST_CONFIG")
+	if configPath == "" {
+		configPath = "config.yaml" // default to current directory
+	}
+
+	f, err := os.Open(configPath)
 	if err != nil {
 		return nil, err
 	}

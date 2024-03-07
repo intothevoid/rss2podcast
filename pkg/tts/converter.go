@@ -1,7 +1,8 @@
 package tts
 
 import (
-	"io/ioutil"
+	"io/fs"
+	"os"
 	"os/exec"
 )
 
@@ -12,7 +13,7 @@ func NewConverter() *Converter {
 }
 
 func (c *Converter) ConvertToAudio(text, filename string) error {
-	err := ioutil.WriteFile("temp.txt", []byte(text), 0644)
+	err := os.WriteFile("temp.txt", []byte(text), fs.FileMode(0644))
 	if err != nil {
 		return err
 	}
