@@ -31,12 +31,20 @@ func main() {
 		if i >= 10 {
 			break
 		}
-		store.Save(item.Title, item.Description)
+
+		rssItem := rss.RSSItem{
+			Title:       item.Title,
+			Description: item.Description,
+		}
+		store.Save(item.GUID, rssItem)
 	}
 
+	// Scrape all URLs and populate HTML content
+	store.PopulateHtmlContent()
+
 	// Summarize and convert to audio
-	for title, description := range store.GetData() {
-		summary, _ := ollama.Summarize(description)
-		converter.ConvertToAudio(summary, title+".aiff")
+	for _, rssItem := range store.GetData() {
+		summary, _ := ollama.Summarize(rssItem.HtmlContent)
+		converter.ConvertToAudio(summary, rssItem.Title+".aiff")
 	}
 }
