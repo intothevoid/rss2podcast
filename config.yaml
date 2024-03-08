@@ -1,3 +1,6 @@
 rss:
   url: "https://flipboard.com/topic/motogp.rss"
   max_articles: 10
+ollama:
+  end_point: "http://localhost:8080"
+  model: "codeup:13b"

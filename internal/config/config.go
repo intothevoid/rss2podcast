@@ -11,6 +11,10 @@ type Config struct {
 		URL         string `yaml:"url"`
 		MaxArticles int    `yaml:"max_articles"`
 	} `yaml:"rss"`
+	Ollama struct {
+		EndPoint string `yaml:"end_point"`
+		Model    string `yaml:"model"`
+	} `yaml:"ollama"`
 }
 
 func LoadConfig() (*Config, error) {
