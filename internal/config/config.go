@@ -8,7 +8,8 @@ import (
 
 type Config struct {
 	RSS struct {
-		URL string `yaml:"url"`
+		URL         string `yaml:"url"`
+		MaxArticles int    `yaml:"max_articles"`
 	} `yaml:"rss"`
 }
 

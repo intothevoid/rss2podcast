@@ -1,2 +1,3 @@
 rss:
   url: "https://flipboard.com/topic/motogp.rss"
+  max_articles: 10

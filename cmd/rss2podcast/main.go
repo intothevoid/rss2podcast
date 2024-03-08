@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/intothevoid/rss2podcast/internal/config"
+	"github.com/intothevoid/rss2podcast/internal/io"
 	"github.com/intothevoid/rss2podcast/internal/store"
 	"github.com/intothevoid/rss2podcast/pkg/llm"
 	"github.com/intothevoid/rss2podcast/pkg/rss"
@@ -15,32 +16,37 @@ func main() {
 	store := store.NewStore()
 	ollama := llm.NewOllama("http://localhost:8000")
 	converter := tts.NewConverter()
+	writer := io.NewJsonWriter(store)
 
 	// Get RSS feed URL from config
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
-	rssURL := cfg.RSS.URL
 
 	// Parse RSS feed
-	items, _ := rssParser.ParseURL(rssURL)
+	items, _ := rssParser.ParseURL(cfg.RSS.URL)
 
-	// Store top 10 articles
+	// Store top 'maxArticles' articles, default to 10
 	for i, item := range items {
-		if i >= 10 {
+		if i >= cfg.RSS.MaxArticles {
 			break
 		}
 
 		rssItem := rss.RSSItem{
 			Title:       item.Title,
 			Description: item.Description,
+			Url:         item.Link,
+			HtmlContent: "",
 		}
 		store.Save(item.GUID, rssItem)
 	}
 
 	// Scrape all URLs and populate HTML content
 	store.PopulateHtmlContent()
+
+	// Write store to JSON
+	writer.WriteStore(store)
 
 	// Summarize and convert to audio
 	for _, rssItem := range store.GetData() {
