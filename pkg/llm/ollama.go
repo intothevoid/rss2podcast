@@ -25,6 +25,8 @@ func NewOllama(endpoint string, model string) LLM {
 type GenerateRequest struct {
 	Model  string `json:"model"`
 	Prompt string `json:"prompt"`
+	Format string `json:"format"`
+	Stream bool   `json:"stream"`
 }
 
 // Update the GenerateResponse struct to include all fields from the JSON response
@@ -41,6 +43,7 @@ func (o *ollama) SendRequest(prompt string) (string, error) {
 	payload := GenerateRequest{
 		Model:  o.model, // Using the model field from the ollama struct
 		Prompt: prompt,
+		Stream: false,
 	}
 
 	// Convert the payload to JSON
@@ -68,19 +71,17 @@ func (o *ollama) SendRequest(prompt string) (string, error) {
 	decoder := json.NewDecoder(resp.Body)
 
 	// Loop through the JSON stream
-	for {
-		var response GenerateResponse
-		if err := decoder.Decode(&response); err == io.EOF {
-			break
-		} else if err != nil {
+	var response GenerateResponse
+	if err := decoder.Decode(&response); err != io.EOF {
+		if err != nil {
 			return "", fmt.Errorf("Error decoding JSON stream: %v", err)
 		}
-
-		// Process each response object
-		fmt.Printf("Model: %s, CreatedAt: %s, Response: %s, Done: %t\n", response.Model, response.CreatedAt, response.Response, response.Done)
 	}
+
+	// Process each response object
+	fmt.Printf("Model: %s, CreatedAt: %s, Response: %s, Done: %t\n", response.Model, response.CreatedAt, response.Response, response.Done)
 
 	// Since we're processing a stream, we don't return a single response string.
 	// You might want to aggregate responses or handle them differently based on your application's needs.
-	return "", nil
+	return response.Response, nil
 }

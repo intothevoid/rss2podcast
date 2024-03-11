@@ -38,3 +38,27 @@ func (w *writer) WriteStore(store *store.Store) error {
 
 	return nil
 }
+
+func (w *writer) ReadStore() (*store.Store, error) {
+	file, err := os.Open("articles.json")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	decoder := json.NewDecoder(file)
+	store := store.NewStore()
+
+	for decoder.More() {
+		var data map[string]rss.RSSItem
+		if err := decoder.Decode(&data); err != nil {
+			return nil, err
+		}
+
+		for key, rssItem := range data {
+			store.Save(key, rssItem)
+		}
+	}
+
+	return store, nil
+}

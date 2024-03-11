@@ -15,6 +15,10 @@ type Config struct {
 		EndPoint string `yaml:"end_point"`
 		Model    string `yaml:"model"`
 	} `yaml:"ollama"`
+	Podcast struct {
+		Subject   string `yaml:"subject"`
+		Podcaster string `yaml:"podcaster"`
+	} `yaml:"podcast"`
 }
 
 func LoadConfig() (*Config, error) {

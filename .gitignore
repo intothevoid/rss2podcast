@@ -23,4 +23,4 @@ go.work
 # articles.json
 cmd/rss2podcast/articles.json
 articles.json
-temp.txt
+*.txt
