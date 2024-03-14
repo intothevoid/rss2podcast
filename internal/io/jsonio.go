@@ -12,7 +12,7 @@ type writer struct {
 	store *store.Store
 }
 
-func NewJsonWriter(store *store.Store) StoreWriter {
+func NewJsonWriter(store *store.Store) StoreIO {
 	return &writer{
 		store: store,
 	}

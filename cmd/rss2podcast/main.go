@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/intothevoid/rss2podcast/internal/config"
@@ -30,11 +31,29 @@ func main() {
 	converter := tts.NewConverter(cfg.TTS.URL)
 	writer := io.NewJsonWriter(store)
 
+	// Check command line arguments
+	noParse := false
+	noConvert := false
+	noConnectionCheck := false
+
+	for _, arg := range os.Args[1:] {
+		switch arg {
+		case "--no-parse":
+			noParse = true
+		case "--no-convert":
+			noConvert = true
+		case "--no-connection-check":
+			noConnectionCheck = true
+		}
+	}
+
 	// Check ollama connection
-	log.Println("Checking connection to Ollama...")
-	err = ollama.CheckConnection()
-	if err != nil {
-		log.Fatal(err)
+	if !noConnectionCheck {
+		log.Println("Checking connection to Ollama...")
+		err = ollama.CheckConnection()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	// podcast filename
@@ -60,21 +79,23 @@ func main() {
 	fileutil.AppendStringToFile(podcast_fname_txt, introduction)
 
 	// Parse RSS feed
-	items, _ := rssParser.ParseURL(cfg.RSS.URL)
+	if !noParse {
+		items, _ := rssParser.ParseURL(cfg.RSS.URL)
 
-	// Store top 'maxArticles' articles, default to 10
-	for i, item := range items {
-		if i >= cfg.RSS.MaxArticles {
-			break
-		}
+		// Store top 'maxArticles' articles, default to 10
+		for i, item := range items {
+			if i >= cfg.RSS.MaxArticles {
+				break
+			}
 
-		rssItem := rss.RSSItem{
-			Title:       item.Title,
-			Description: item.Description,
-			Url:         item.Link,
-			HtmlContent: "",
+			rssItem := rss.RSSItem{
+				Title:       item.Title,
+				Description: item.Description,
+				Url:         item.Link,
+				HtmlContent: "",
+			}
+			store.Save(item.GUID, rssItem)
 		}
-		store.Save(item.GUID, rssItem)
 	}
 
 	// Scrape all URLs and populate HTML content
@@ -95,10 +116,12 @@ func main() {
 	}
 
 	// Convert podcast text to audio
-	log.Println("Converting podcast text to audio...")
-	fileContent, err := fileutil.ReadFileContent(podcast_fname_txt)
-	if err != nil {
-		log.Fatal(err)
+	if !noConvert {
+		log.Println("Converting podcast text to audio...")
+		fileContent, err := fileutil.ReadFileContent(podcast_fname_txt)
+		if err != nil {
+			log.Fatal(err)
+		}
+		converter.ConvertToAudio(fileContent, podcast_fname_wav)
 	}
-	converter.ConvertToAudio(fileContent, podcast_fname_wav)
 }

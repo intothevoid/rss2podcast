@@ -25,3 +25,6 @@ cmd/rss2podcast/articles.json
 articles.json
 *.txt
 *.wav
+cmd/.DS_Store
+cmd/rss2podcast/.DS_Store
+cmd/rss2podcast/rss2podcast
