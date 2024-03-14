@@ -1,10 +1,6 @@
 # rss2podcast
 Parse, summarise and convert rss feeds into an audio podcast 
 
-# RSS to Podcast Converter
-
-This project is a Go application that converts RSS feeds into podcasts.
-
 ## Installation 
 
 Clone the repository and navigate into the directory:
