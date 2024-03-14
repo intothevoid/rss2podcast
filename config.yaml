@@ -3,7 +3,9 @@ podcast:
   podcaster: "Cody"
 rss:
   url: "https://flipboard.com/topic/motogp.rss"
-  max_articles: 10
+  max_articles: 5
 ollama:
   end_point: "http://localhost:11434/api/generate"
   model: "codeup:13b"
+tts:
+  url: "http://localhost:5002/api/tts"

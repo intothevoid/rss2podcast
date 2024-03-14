@@ -17,3 +17,11 @@ func AppendStringToFile(filename string, text string) error {
 
 	return nil
 }
+
+func ReadFileContent(filename string) (string, error) {
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+	return string(content), nil
+}

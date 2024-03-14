@@ -19,6 +19,9 @@ type Config struct {
 		Subject   string `yaml:"subject"`
 		Podcaster string `yaml:"podcaster"`
 	} `yaml:"podcast"`
+	TTS struct {
+		URL string `yaml:"url"`
+	} `yaml:"tts"`
 }
 
 func LoadConfig() (*Config, error) {

@@ -27,7 +27,7 @@ func main() {
 	store := store.NewStore()
 	ollama := llm.NewOllama(cfg.Ollama.EndPoint, cfg.Ollama.Model)
 	podcast := podcast.NewPodcast(ollama)
-	converter := tts.NewConverter()
+	converter := tts.NewConverter(cfg.TTS.URL)
 	writer := io.NewJsonWriter(store)
 
 	// Check ollama connection
@@ -43,9 +43,11 @@ func main() {
 	podcast_fname_txt := fmt.Sprintf("%s_summary_%s.txt", cfg.Podcast.Subject, ts)
 	podcast_fname_wav := fmt.Sprintf("%s_summary_%s.wav", cfg.Podcast.Subject, ts)
 
-	store, err = writer.ReadStore()
+	tmpStore, err := writer.ReadStore()
 	if err != nil {
 		log.Println("No articles found, starting from scratch")
+	} else {
+		store = tmpStore
 	}
 
 	// Generate podcast introduction
@@ -53,20 +55,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	converter.ConvertToAudio(introduction, podcast_fname_wav)
+
 	log.Println("Generating podcast introduction...")
 	fileutil.AppendStringToFile(podcast_fname_txt, introduction)
-
-	// Summarize articles
-	for _, item := range store.GetData() {
-		log.Printf("Summarizing article - %s", item.Title)
-		summary, err := podcast.GenerateSummary(item.Title, item.Description, item.HtmlContent)
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Print("Done.")
-		fileutil.AppendStringToFile(podcast_fname_txt, summary)
-	}
 
 	// Parse RSS feed
 	items, _ := rssParser.ParseURL(cfg.RSS.URL)
@@ -91,4 +82,23 @@ func main() {
 
 	// Write store to JSON
 	writer.WriteStore(store)
+
+	// Summarize articles
+	for _, item := range store.GetData() {
+		log.Printf("Summarizing article - %s", item.Title)
+		summary, err := podcast.GenerateSummary(item.Title, item.Description, item.HtmlContent)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Print("Done.")
+		fileutil.AppendStringToFile(podcast_fname_txt, summary)
+	}
+
+	// Convert podcast text to audio
+	log.Println("Converting podcast text to audio...")
+	fileContent, err := fileutil.ReadFileContent(podcast_fname_txt)
+	if err != nil {
+		log.Fatal(err)
+	}
+	converter.ConvertToAudio(fileContent, podcast_fname_wav)
 }

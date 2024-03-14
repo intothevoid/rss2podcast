@@ -7,27 +7,31 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 )
 
-type Converter struct{}
+type Converter struct {
+	baseURL string
+}
 
-func NewConverter() *Converter {
-	return &Converter{}
+func NewConverter(baseURL string) *Converter {
+	return &Converter{
+		baseURL: baseURL,
+	}
 }
 
 // ConvertToAudio sends a GET request with the specified content as a query parameter.
 func (c *Converter) ConvertToAudio(content string, fileName string) error {
-	// Prepare the URL with query parameters
-	baseURL := "http://localhost:5002/api/tts"
+	// Create the request body
 	params := url.Values{}
 	params.Add("text", content)
 	params.Add("speaker_id", "")
 	params.Add("style_wav", "")
 	params.Add("language_id", "")
-	requestURL := fmt.Sprintf("%s?%s", baseURL, params.Encode())
+	requestBody := strings.NewReader(params.Encode())
 
 	// Create a new request using http
-	req, err := http.NewRequest("GET", requestURL, nil)
+	req, err := http.NewRequest("POST", c.baseURL, requestBody)
 	if err != nil {
 		fmt.Printf("Error creating request: %s\n", err)
 		return err
@@ -45,6 +49,7 @@ func (c *Converter) ConvertToAudio(content string, fileName string) error {
 	req.Header.Set("Sec-Fetch-Mode", "cors")
 	req.Header.Set("Sec-Fetch-Site", "same-origin")
 	req.Header.Set("Cache-Control", "max-age=0")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	// Send the request using the default client
 	client := &http.Client{}
