@@ -24,3 +24,4 @@ go.work
 cmd/rss2podcast/articles.json
 articles.json
 *.txt
+*.wav

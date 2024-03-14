@@ -22,7 +22,7 @@ func NewPodcast(ol llm.LLM) Podcast {
 }
 
 func (pod *podcast) GenerateSummary(title string, description string, content string) (string, error) {
-	retval, err := pod.ollama.SendRequest(fmt.Sprintf("Process this article as a transcript to be read on a news podcast. Only talk about the title, description and the content. Do not add any introduction. Title: %s. Description: %s, Content: %s.", title, description, content))
+	retval, err := pod.ollama.SendRequest(fmt.Sprintf("Process this article as a transcript to be read on a news podcast. Do not add any introduction. Only talk about the title, description and the content. Title: %s. Description: %s, Content: %s.", title, description, content))
 	if err != nil {
 		return "", fmt.Errorf("Error sending request: %v", err)
 	}

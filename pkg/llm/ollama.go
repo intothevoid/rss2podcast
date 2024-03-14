@@ -85,3 +85,36 @@ func (o *ollama) SendRequest(prompt string) (string, error) {
 	// You might want to aggregate responses or handle them differently based on your application's needs.
 	return response.Response, nil
 }
+
+// Function to check if Ollama endpoint is reachable
+func (o *ollama) CheckConnection() error {
+	// Create the request payload
+	payload := GenerateRequest{
+		Model:  o.model, // Using the model field from the ollama struct
+		Prompt: "Test connection",
+		Stream: false,
+	}
+
+	// Convert the payload to JSON
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("Error marshaling payload: %v", err)
+	}
+
+	// Create a new HTTP request using the endpoint field
+	req, err := http.NewRequest("POST", o.endpoint, bytes.NewBuffer(payloadBytes))
+	if err != nil {
+		return fmt.Errorf("Error creating request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	// Send the request using an HTTP client
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("Error sending request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	return nil
+}

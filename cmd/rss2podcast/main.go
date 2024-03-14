@@ -12,6 +12,7 @@ import (
 	"github.com/intothevoid/rss2podcast/pkg/llm"
 	"github.com/intothevoid/rss2podcast/pkg/podcast"
 	"github.com/intothevoid/rss2podcast/pkg/rss"
+	"github.com/intothevoid/rss2podcast/pkg/tts"
 )
 
 func main() {
@@ -26,13 +27,21 @@ func main() {
 	store := store.NewStore()
 	ollama := llm.NewOllama(cfg.Ollama.EndPoint, cfg.Ollama.Model)
 	podcast := podcast.NewPodcast(ollama)
-	// converter := tts.NewConverter()
+	converter := tts.NewConverter()
 	writer := io.NewJsonWriter(store)
+
+	// Check ollama connection
+	log.Println("Checking connection to Ollama...")
+	err = ollama.CheckConnection()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// podcast filename
 	// get timestamp as string in format yymmhh_hhmm
 	ts := time.Now().Local().Format("2006_01_02_1504")
-	podcast_fname := fmt.Sprintf("%s_summary_%s.txt", cfg.Podcast.Subject, ts)
+	podcast_fname_txt := fmt.Sprintf("%s_summary_%s.txt", cfg.Podcast.Subject, ts)
+	podcast_fname_wav := fmt.Sprintf("%s_summary_%s.wav", cfg.Podcast.Subject, ts)
 
 	store, err = writer.ReadStore()
 	if err != nil {
@@ -44,8 +53,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	converter.ConvertToAudio(introduction, podcast_fname_wav)
 	log.Println("Generating podcast introduction...")
-	fileutil.AppendStringToFile(podcast_fname, introduction)
+	fileutil.AppendStringToFile(podcast_fname_txt, introduction)
 
 	// Summarize articles
 	for _, item := range store.GetData() {
@@ -55,7 +65,7 @@ func main() {
 			log.Fatal(err)
 		}
 		log.Print("Done.")
-		fileutil.AppendStringToFile(podcast_fname, summary)
+		fileutil.AppendStringToFile(podcast_fname_txt, summary)
 	}
 
 	// Parse RSS feed
