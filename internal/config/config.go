@@ -8,8 +8,9 @@ import (
 
 type Config struct {
 	RSS struct {
-		URL         string `yaml:"url"`
-		MaxArticles int    `yaml:"max_articles"`
+		URL         string   `yaml:"url"`
+		MaxArticles int      `yaml:"max_articles"`
+		Filters     []string `yaml:"filters"`
 	} `yaml:"rss"`
 	Ollama struct {
 		EndPoint string `yaml:"end_point"`

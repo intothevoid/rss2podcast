@@ -69,17 +69,17 @@ func main() {
 		store = tmpStore
 	}
 
-	// Generate podcast introduction
-	introduction, err := podcast.GenerateIntroduction(cfg.Podcast.Subject, cfg.Podcast.Podcaster)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println("Generating podcast introduction...")
-	fileutil.AppendStringToFile(podcast_fname_txt, introduction)
-
-	// Parse RSS feed
 	if !noParse {
+		// Generate podcast introduction
+		introduction, err := podcast.GenerateIntroduction(cfg.Podcast.Subject, cfg.Podcast.Podcaster)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Println("Generating podcast introduction...")
+		fileutil.AppendStringToFile(podcast_fname_txt, introduction)
+
+		// Parse RSS feed
 		items, _ := rssParser.ParseURL(cfg.RSS.URL)
 
 		// Store top 'maxArticles' articles, default to 10
@@ -94,7 +94,9 @@ func main() {
 				Url:         item.Link,
 				HtmlContent: "",
 			}
-			store.Save(item.GUID, rssItem)
+			if !rssItem.IsFiltered(cfg.RSS.Filters) {
+				store.Save(item.GUID, rssItem)
+			}
 		}
 	}
 
@@ -124,4 +126,7 @@ func main() {
 		}
 		converter.ConvertToAudio(fileContent, podcast_fname_wav)
 	}
+
+	// Clean up
+	os.Remove("articles.json")
 }
