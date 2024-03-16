@@ -2,7 +2,7 @@ podcast:
   subject: "MotoGP"
   podcaster: "Cody"
 rss:
-  url: "https://reddit.com/r/motogp.rss"
+  url: "https://flipboard.com/topic/motogp.rss"
   max_articles: 10
   filters:
     - "Daily"
