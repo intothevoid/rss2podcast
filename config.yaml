@@ -1,8 +1,8 @@
 podcast:
-  subject: "MotoGP"
+  subject: "News"
   podcaster: "Cody"
 rss:
-  url: "https://flipboard.com/topic/motogp.rss"
+  url: "https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best"
   max_articles: 10
   filters:
     - "Daily"

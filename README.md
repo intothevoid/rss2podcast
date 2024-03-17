@@ -19,6 +19,35 @@ The application uses a locally hosted version of Ollama. The Ollama API is used 
 ### TTS
 The summarised article content is then converted into an audio podcast using the Coqui TTS API.
 
+## Dependencies
+
+This project requires `ffmpeg` to be installed on your system. Here are the installation instructions for various operating systems:
+
+### macOS
+
+You can use Homebrew to install `ffmpeg` on macOS:
+
+```bash
+brew install ffmpeg
+```
+
+### Windows
+
+1. Download the `ffmpeg` build for Windows from the [official website](https://ffmpeg.org/download.html).
+2. Extract the downloaded ZIP file.
+3. Add the `bin` directory from the extracted folder to your system's PATH.
+
+### Linux
+
+The installation command depends on your Linux distribution.
+
+#### Ubuntu/Debian
+
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
 ## Installation 
 
 Clone the repository and navigate into the directory:

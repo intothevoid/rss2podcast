@@ -9,6 +9,7 @@ import (
 	"github.com/intothevoid/rss2podcast/internal/config"
 	"github.com/intothevoid/rss2podcast/internal/io"
 	"github.com/intothevoid/rss2podcast/internal/store"
+	"github.com/intothevoid/rss2podcast/pkg/audio"
 	"github.com/intothevoid/rss2podcast/pkg/fileutil"
 	"github.com/intothevoid/rss2podcast/pkg/llm"
 	"github.com/intothevoid/rss2podcast/pkg/podcast"
@@ -61,6 +62,7 @@ func main() {
 	ts := time.Now().Local().Format("2006_01_02_1504")
 	podcast_fname_txt := fmt.Sprintf("%s_summary_%s.txt", cfg.Podcast.Subject, ts)
 	podcast_fname_wav := fmt.Sprintf("%s_summary_%s.wav", cfg.Podcast.Subject, ts)
+	podcast_fname_mp3 := fmt.Sprintf("%s_summary_%s.mp3", cfg.Podcast.Subject, ts)
 
 	tmpStore, err := writer.ReadStore()
 	if err != nil {
@@ -123,7 +125,12 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		// Generate audio file
 		converter.ConvertToAudio(fileContent, podcast_fname_wav)
+
+		// Convert audio file to mp3
+		audio.ConvertWavToMp3(podcast_fname_wav, podcast_fname_mp3)
 	}
 
 	// Clean up
