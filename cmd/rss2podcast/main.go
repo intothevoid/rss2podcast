@@ -36,6 +36,7 @@ func main() {
 	noParse := false
 	noConvert := false
 	noConnectionCheck := false
+	service := false
 
 	for _, arg := range os.Args[1:] {
 		switch arg {
@@ -45,7 +46,16 @@ func main() {
 			noConvert = true
 		case "--no-connection-check":
 			noConnectionCheck = true
+		case "--service":
+			service = true
 		}
+	}
+
+	if service {
+		// Run as a service
+		log.Println("Running as a service...")
+
+		// Start web service
 	}
 
 	// Check ollama connection

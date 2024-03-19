@@ -4,6 +4,7 @@ go 1.22
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.0
+	github.com/gorilla/mux v1.8.1
 	github.com/mmcdole/gofeed v1.3.0
 	gopkg.in/yaml.v2 v2.4.0
 )

@@ -20,6 +20,11 @@
     </div>
   </nav>
   <div class="config-ui flex flex-col justify-center items-center py-2">
+    <style>
+      label {
+        padding-right: 10px;
+      }
+    </style>
     <div class="flex flex-row text-center py-2">
       <label for="subject">Podcast Subject:</label>
       <input type="text" id="subject" name="subject" value="News">
@@ -67,6 +72,7 @@
     <div class="flex flex-row text-center py-5">
       <button onclick="save()" class="save-button bg-blue-500 text-white"
         style="padding-left: 5px; padding-right: 5px;">Save</button>
+    </div>
     </div>
 
     <footer class="flex justify-center" style="padding-top: 50px;">
