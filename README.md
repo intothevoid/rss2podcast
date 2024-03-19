@@ -108,43 +108,43 @@ The application's configuration is stored in a `config.yaml` file. Here's what e
 
 This section contains information about the podcast.
 
-\```yaml
+```yaml
 podcast:
   subject: "News" # The subject of the podcast
   podcaster: "Cody" # The name of the podcaster
-\```
+```
 
 ### RSS
 
 This section contains information about the RSS feed.
 
-\```yaml
+```yaml
 rss:
   url: "https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best" # The URL of the RSS feed
   max_articles: 10 # The maximum number of articles to fetch from the RSS feed
   filters: # Keywords to filter articles by
     - "Daily"
     - "Weekly"
-\```
+```
 
 ### Ollama
 
 This section contains information about the Ollama service.
 
-\```yaml
+```yaml
 ollama:
   end_point: "http://localhost:11434/api/generate" # The URL of the Ollama service
   model: "mistral:7b" # The model used by the Ollama service
-\```
+```
 
 ### TTS
 
 This section contains information about the Text-to-Speech (TTS) service.
 
-\```yaml
+```yaml
 tts:
   url: "http://localhost:5002/api/tts" # The URL of the TTS service
-\```
+```
 
 You can modify these values to suit your needs. Remember to restart the application after making changes to the configuration file.
 
