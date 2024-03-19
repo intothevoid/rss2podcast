@@ -1,4 +1,7 @@
 # rss2podcast
+
+<img src="resources/logo.jpg" width=200px height=200px></img>
+
 A locally hosted, AI generated podcast from an rss feed. 
 
 ![workflow](https://github.com/intothevoid/rss2podcast/actions/workflows/go.yml/badge.svg)
