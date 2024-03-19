@@ -24,22 +24,22 @@
     <div class="podcasts-panel" style="padding: 30px;">
       <ul class="podcasts-list text-center">
         <li class="podcast-item" style="padding: 2px;"><button
-            onclick="loadRSS('https://www.example.com/world-news')">World News</button></li>
+            onclick="loadTopic('world')">World News</button></li>
         <li class="podcast-item" style="padding: 2px;"><button
-            onclick="loadRSS('https://www.example.com/australia-news')">Australia News</button></li>
+            onclick="loadTopic('australia')">Australia News</button></li>
         <li class="podcast-item" style="padding: 2px;"><button
-            onclick="loadRSS('https://www.example.com/technology-news')">Technology News</button></li>
-        <li class="podcast-item" style="padding: 2px;"><button onclick="loadRSS('https://www.example.com/ai-news')">AI
+            onclick="loadTopic('technology')">Technology News</button></li>
+        <li class="podcast-item" style="padding: 2px;"><button onclick="loadTopic('ai')">AI
             News</button></li>
         <li class="podcast-item" style="padding: 2px;"><button
-            onclick="loadRSS('https://www.example.com/motogp-news')">MotoGP News</button></li>
+            onclick="loadTopic('motogp')">MotoGP News</button></li>
         <li class="podcast-item" style="padding: 2px;"><button
-            onclick="loadRSS('https://www.example.com/finance-news')">Finance News</button></li>
+            onclick="loadTopic('finance')">Finance News</button></li>
       </ul>
     </div>
 
     <div class="textbox-container text-center" style="padding: 30px">
-      <input type="text" id="rss-url" class="textbox" placeholder="Enter RSS URL">
+      <input type="text" id="rss-url" class="textbox" placeholder="Enter Podcast Topic">
       <button onclick="generateRSS()" class="generate-button bg-blue-500 text-white"
         style="padding-left: 5px; padding-right: 5px;">Generate</button>
     </div>

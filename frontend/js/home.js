@@ -23,20 +23,15 @@ function loadPage(page) {
   selectedPage.style.display = 'block';
 }
 
-// Handle podcasts panel functionality
-const podcastButtons = document.querySelectorAll('.podcast-button');
-const textbox = document.getElementById('rss-textbox');
-const generateButton = document.getElementById('generate-button');
-
-podcastButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const rssUrl = button.dataset.rssUrl;
-    textbox.value = rssUrl;
-  });
-});
 
 // Handle generate button functionality
 generateButton.addEventListener('click', () => {
   const rssUrl = textbox.value;
   // Perform generate action
 });
+
+// function to load rss url in textbox
+function loadTopic(rssUrl) {
+  const textbox = document.getElementById('rss-url');
+  textbox.value = rssUrl;
+}
