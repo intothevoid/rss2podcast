@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RSS2Podcasts</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-200">
+  <nav class="bg-blue-500 p-4 flex justify-between">
+    <div>
+      <a href="home.html" class="text-white ml-4 bg-gray-600">Home</a>
+      <a href="configuration.html" class="text-white">Configuration</a>
+      <a href="about.html" class="text-white ml-4">About</a>
+    </div>
+    <div>
+      <span class="text-white"><strong>rss2podcast</strong></span>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="podcasts-panel" style="padding: 30px;">
+      <ul class="podcasts-list text-center">
+        <li class="podcast-item" style="padding: 2px;"><button
+            onclick="loadRSS('https://www.example.com/world-news')">World News</button></li>
+        <li class="podcast-item" style="padding: 2px;"><button
+            onclick="loadRSS('https://www.example.com/australia-news')">Australia News</button></li>
+        <li class="podcast-item" style="padding: 2px;"><button
+            onclick="loadRSS('https://www.example.com/technology-news')">Technology News</button></li>
+        <li class="podcast-item" style="padding: 2px;"><button onclick="loadRSS('https://www.example.com/ai-news')">AI
+            News</button></li>
+        <li class="podcast-item" style="padding: 2px;"><button
+            onclick="loadRSS('https://www.example.com/motogp-news')">MotoGP News</button></li>
+        <li class="podcast-item" style="padding: 2px;"><button
+            onclick="loadRSS('https://www.example.com/finance-news')">Finance News</button></li>
+      </ul>
+    </div>
+
+    <div class="textbox-container text-center" style="padding: 30px">
+      <input type="text" id="rss-url" class="textbox" placeholder="Enter RSS URL">
+      <button onclick="generateRSS()" class="generate-button bg-blue-500 text-white"
+        style="padding-left: 5px; padding-right: 5px;">Generate</button>
+    </div>
+
+    <footer class="flex justify-center" style="padding-top: 50px;">
+      <p>&copy; 2024 Karan Kadam. All rights reserved.</p>
+    </footer>
+
+    <script src="js/home.js"></script>
+</body>
+
+</html>

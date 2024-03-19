@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-200">
+  <nav class="bg-blue-500 p-4 flex justify-between">
+    <div>
+      <a href="home.html" class="text-white">Home</a>
+      <a href="configuration.html" class="text-white ml-4">Configuration</a>
+      <a href="about.html" class="text-white ml-4 bg-gray-600">About</a>
+    </div>
+    <div>
+      <span class="text-white"><strong>rss2podcast</strong></span>
+    </div>
+  </nav>
+  <header>
+  </header>
+
+  <main class="text-center p-4">
+    <p>A locally hosted, AI generated podcast from an rss feed.</p>
+    <p class="flex justify-center p-4"><img
+        src="https://github.com/intothevoid/rss2podcast/actions/workflows/go.yml/badge.svg" alt="workflow"></p>
+    <p>Powered by -</p>
+    <p class="flex justify-center p-4">
+      <img src="resources/rss.png" width="80px" height="80px">
+      <img src="resources/ollama.png" width="80px" height="80px">
+      <img src="resources/coqui.png" width="80px" height="80px">
+    </p>
+    <h2 style="padding: 5px;"><strong>How it works</strong></h2>
+    <p>The application reads an rss feed, extracts the articles and summarises them.</p>
+    <p>RSS + Ollama + TTS = Podcast</p>
+    <h3 style="padding: 5px;"><strong>RSS</strong></h3>
+    <p>The application reads an rss feed and extracts the articles. Each of these articles are then processed by
+      scraping the article content.</p>
+    <h3 style="padding: 5px;"><strong>Ollama</strong></h3>
+    <p>The application uses a locally hosted version of Ollama. The Ollama API is used to summarise the article content.
+      Default model used is mistral:7b</p>
+    <h3 style="padding: 5px;"><strong>Coqui TTS</strong></h3>
+    <p>The summarised article content is then converted into an audio podcast using the Coqui TTS API.</p>
+  </main>
+
+
+  <footer class="flex justify-center" style="padding-top: 50px;">
+    <p>&copy; 2024 Karan Kadam. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

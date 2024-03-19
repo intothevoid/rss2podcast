@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuration</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-200">
+  <nav class="bg-blue-500 p-4 flex justify-between">
+    <div>
+      <a href="home.html" class="text-white">Home</a>
+      <a href="configuration.html" class="text-white ml-4 bg-gray-600">Configuration</a>
+      <a href="about.html" class="text-white ml-4">About</a>
+    </div>
+    <div>
+      <span class="text-white"><strong>rss2podcast</strong></span>
+    </div>
+  </nav>
+  <div class="config-ui flex flex-col justify-center items-center py-2">
+    <div class="flex flex-row text-center py-2">
+      <label for="subject">Podcast Subject:</label>
+      <input type="text" id="subject" name="subject" value="News">
+    </div>
+
+    <div class="flex flex-row text-center py-2">
+      <label for="podcaster">Podcaster:</label>
+      <input type="text" id="podcaster" name="podcaster" value="Cody">
+    </div>
+
+    <div class="flex flex-row text-center py-2">
+      <label for="url" style="padding: 2px;">RSS URL:</label>
+      <input type="text" id="url" name="url"
+        value="https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best">
+    </div>
+
+    <div class="flex flex-row text-center py-2">
+      <label for="max-articles">Max Articles:</label>
+      <input type="number" id="max-articles" name="max-articles" value="10">
+    </div>
+
+    <div class="flex flex-row text-center py-2">
+      <label for="filters">Filters:</label>
+      <select id="filters" name="filters" multiple>
+        <option value="Daily">Daily</option>
+        <option value="Weekly">Weekly</option>
+      </select>
+    </div>
+
+    <div class="flex flex-row text-center py-2">
+      <label for="end-point">Ollama Endpoint:</label>
+      <input type="text" id="end-point" name="end-point" value="http://localhost:11434/api/generate">
+    </div>
+
+    <div class="flex flex-row text-center py-2">
+      <label for="model">Ollama Model:</label>
+      <input type="text" id="model" name="model" value="mistral:7b">
+    </div>
+
+    <div class="flex flex-row text-center py-2">
+      <label for="tts-url">TTS URL:</label>
+      <input type="text" id="tts-url" name="tts-url" value="http://localhost:5002/api/tts">
+    </div>
+
+    <div class="flex flex-row text-center py-5">
+      <button onclick="save()" class="save-button bg-blue-500 text-white"
+        style="padding-left: 5px; padding-right: 5px;">Save</button>
+    </div>
+
+    <footer class="flex justify-center" style="padding-top: 50px;">
+      <p>&copy; 2024 Karan Kadam. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
