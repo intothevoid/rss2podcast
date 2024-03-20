@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/intothevoid/rss2podcast/pkg/api/handler"
+	"github.com/intothevoid/rss2podcast/internal/api/handler"
 )
 
 func StartWebService() {
