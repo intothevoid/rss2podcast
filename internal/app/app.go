@@ -77,7 +77,7 @@ func NewRSS2Podcast() *rss2podcast {
 		noConnectionCheck: noConnectionCheck,
 		noParse:           noParse,
 		noConvert:         noConvert,
-		topic:             "world", //default topic
+		topic:             "default", //default topic
 	}
 }
 
@@ -98,6 +98,11 @@ func (r *rss2podcast) Run() (string, error) {
 			log.Fatal(err)
 			return "", err
 		}
+	}
+
+	// Set podcast subject to passed in topic if not default
+	if r.topic != "default" {
+		r.cfg.Podcast.Subject = r.topic
 	}
 
 	// podcast filename

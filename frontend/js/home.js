@@ -17,14 +17,11 @@ function loadPage(page) {
   pages.forEach(page => {
     page.style.display = 'none';
   });
-
-  // Show selected page
-  const selectedPage = document.getElementById(page);
-  selectedPage.style.display = 'block';
 }
 
 
 // Handle generate button functionality
+const generateButton = document.getElementById('generate-button');
 generateButton.addEventListener('click', () => {
   const rssUrl = textbox.value;
   // Perform generate action
@@ -40,6 +37,9 @@ function loadTopic(rssUrl) {
 function generateRSS() {
   var topic = document.getElementById("rss-url").value;
   var url = "http://localhost:8080/generate/" + topic;
+  
+  // Disable UI elements
+  disableUI();
 
   // Send GET request to the specified URL
   fetch(url)
@@ -47,10 +47,14 @@ function generateRSS() {
     .then(data => {
       // Handle the response data here
       console.log(data);
+
+      // Enable UI elements
+      enableUI();
     })
     .catch(error => {
       // Handle any errors here
       console.error(error);
+      enableUI();
     });
 }
 
