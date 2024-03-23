@@ -3,6 +3,7 @@ package rss2podcast
 import (
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"time"
 
@@ -100,10 +101,19 @@ func (r *rss2podcast) Run() (string, error) {
 		}
 	}
 
+	// Clean up old files
+	fileutil.CleanupFolder(".", []string{".txt", ".wav", ".mp3", ".json"})
+
 	// Set podcast subject to passed in topic if not default
 	if r.topic != "default" {
 		r.cfg.Podcast.Subject = r.topic
 	}
+
+	// Encode topic for url query
+	r.topic = url.QueryEscape(r.topic)
+
+	// Set RSS feed URL to Google News search for topic
+	r.cfg.RSS.URL = fmt.Sprintf("https://news.google.com/rss/search?q=%s", r.topic)
 
 	// podcast filename
 	// get timestamp as string in format yymmhh_hhmm
@@ -183,9 +193,6 @@ func (r *rss2podcast) Run() (string, error) {
 		// Convert audio file to mp3
 		audio.ConvertWavToMp3(podcast_fname_wav, podcast_fname_mp3)
 	}
-
-	// Clean up
-	os.Remove("articles.json")
 
 	return podcast_fname_mp3, nil
 }

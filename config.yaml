@@ -2,7 +2,7 @@ podcast:
   subject: "News"
   podcaster: "Cody"
 rss:
-  url: "https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best"
+  url: "https://news.google.com/rss/search?q=australia"
   max_articles: 10
   filters:
     - "Daily"
