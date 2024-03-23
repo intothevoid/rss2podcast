@@ -9,6 +9,7 @@ navbarItems.forEach(item => {
 
 // Load initial page
 loadPage('home');
+hideSpinner();
 
 // Function to load page content
 function loadPage(page) {
@@ -18,14 +19,6 @@ function loadPage(page) {
     page.style.display = 'none';
   });
 }
-
-
-// Handle generate button functionality
-const generateButton = document.getElementById('generate-button');
-generateButton.addEventListener('click', () => {
-  const rssUrl = textbox.value;
-  // Perform generate action
-});
 
 // function to load rss url in textbox
 function loadTopic(rssUrl) {
@@ -40,37 +33,57 @@ function generateRSS() {
   
   // Disable UI elements
   disableUI();
+  showSpinner();
 
   // Send GET request to the specified URL
   fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      // Handle the response data here
-      console.log(data);
+    .then(response => response.blob())
+    .then(blob => {
+      // Create a URL for the blob object
+      const fileUrl = URL.createObjectURL(blob);
+
+      // Create a hyperlink element
+      const link = document.createElement('a');
+      link.href = fileUrl;
+      link.download = 'podcast.mp3';
+      link.textContent = 'Download';
+
+      // Append the hyperlink to the home page
+      const downloadDiv = document.getElementById('download-url');
+      downloadDiv.appendChild(link);
 
       // Enable UI elements
       enableUI();
+      hideSpinner();
     })
     .catch(error => {
       // Handle any errors here
       console.error(error);
       enableUI();
+      hideSpinner();
     });
 }
 
 // Function to disable all UI elements
 function disableUI() {
-  document.getElementById('rss-url').disabled = true;
-  document.getElementById('generate-button').disabled = true;
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('rss-feed').style.display = 'none';
+  document.getElementById('rss-url').style.display = 'none';
+  document.getElementById('generate-button').style.display = 'none';
+  document.getElementById('download-url').style.display = 'none';
 }
 
 // Function to enable all UI elements
 function enableUI() {
-  document.getElementById('rss-url').disabled = false;
-  document.getElementById('generate-button').disabled = false;
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('rss-feed').style.display = 'block';
+  document.getElementById('rss-url').style.display = 'block';
+  document.getElementById('generate-button').style.display = 'block';
+  document.getElementById('download-url').style.display = 'block';
 }
 
+// Function to show spinner
+function showSpinner() {
+  document.getElementById('spinner').style.display = 'block';
+}
+
+// Function to hide spinner
+function hideSpinner() {
+  document.getElementById('spinner').style.display = 'none';
+}

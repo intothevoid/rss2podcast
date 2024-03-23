@@ -24,32 +24,34 @@
     <img src="resources/logo.jpg" width="200px" height="200px" class="mx-auto" style="padding-top: 50px;">
     <div class="podcasts-panel" style="padding: 30px;">
       <ul class="podcasts-list text-center">
-        <li class="podcast-item" style="padding: 2px;"><button
-            onclick="loadTopic('world')">World News</button></li>
-        <li class="podcast-item" style="padding: 2px;"><button
-            onclick="loadTopic('australia')">Australia News</button></li>
-        <li class="podcast-item" style="padding: 2px;"><button
-            onclick="loadTopic('technology')">Technology News</button></li>
+        <li class="podcast-item" style="padding: 2px;"><button onclick="loadTopic('world')">World News</button></li>
+        <li class="podcast-item" style="padding: 2px;"><button onclick="loadTopic('australia')">Australia News</button>
+        </li>
+        <li class="podcast-item" style="padding: 2px;"><button onclick="loadTopic('technology')">Technology
+            News</button></li>
         <li class="podcast-item" style="padding: 2px;"><button onclick="loadTopic('ai')">AI
             News</button></li>
-        <li class="podcast-item" style="padding: 2px;"><button
-            onclick="loadTopic('motogp')">MotoGP News</button></li>
-        <li class="podcast-item" style="padding: 2px;"><button
-            onclick="loadTopic('finance')">Finance News</button></li>
+        <li class="podcast-item" style="padding: 2px;"><button onclick="loadTopic('motogp')">MotoGP News</button></li>
+        <li class="podcast-item" style="padding: 2px;"><button onclick="loadTopic('finance')">Finance News</button></li>
       </ul>
     </div>
 
-    <div class="textbox-container text-center" style="padding: 30px">
-      <input type="text" id="rss-url" class="textbox" placeholder="Enter Podcast Topic">
+    <div class="flex flex-row textbox-container text-center justify-center" style="padding: 20px">
+      <input type="text" id="rss-url" class="textbox" placeholder="Enter Podcast Topic" style="margin-right: 5px;">
       <button onclick="generateRSS()" class="generate-button bg-blue-500 text-white" id="generate-button"
-        style="padding-left: 5px; padding-right: 5px;">Generate</button>
+        style="padding-left: 5px; padding-right: 5px; margin-right: 5px;">Generate</button>
+      <div class="loader" id="spinner"></div> 
     </div>
 
-    <footer class="flex justify-center" style="padding-top: 50px;">
+    <div class="download-div text-center" style="padding: 20px" id="download-url"></div>
+
+    <footer class="text-xs flex justify-center text-gray-400" style="padding-top: 50px;">
       <p>&copy; 2024 Karan Kadam. All rights reserved.</p>
     </footer>
 
     <script src="js/home.js"></script>
+    <link rel="stylesheet" href="custom.css">
 </body>
 
 </html>
+
