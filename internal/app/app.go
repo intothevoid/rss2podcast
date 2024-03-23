@@ -32,6 +32,7 @@ type rss2podcast struct {
 	noConnectionCheck bool
 	noParse           bool
 	noConvert         bool
+	topic             string
 }
 
 func NewRSS2Podcast() *rss2podcast {
@@ -76,16 +77,26 @@ func NewRSS2Podcast() *rss2podcast {
 		noConnectionCheck: noConnectionCheck,
 		noParse:           noParse,
 		noConvert:         noConvert,
+		topic:             "world", //default topic
 	}
 }
 
-func (r *rss2podcast) Run() string {
+func (r *rss2podcast) SetTopic(topic string) {
+	r.topic = topic
+}
+
+func (r *rss2podcast) GetTopic() string {
+	return r.topic
+}
+
+func (r *rss2podcast) Run() (string, error) {
 	// Check ollama connection
 	if !r.noConnectionCheck {
 		log.Println("Checking connection to Ollama...")
 		err := r.ollama.CheckConnection()
 		if err != nil {
 			log.Fatal(err)
+			return "", err
 		}
 	}
 
@@ -134,6 +145,7 @@ func (r *rss2podcast) Run() string {
 	}
 
 	// Scrape all URLs and populate HTML content
+	log.Println("Gathering content from feed websites...")
 	r.store.PopulateHtmlContent()
 
 	// Write store to JSON
@@ -145,6 +157,7 @@ func (r *rss2podcast) Run() string {
 		summary, err := r.podcast.GenerateSummary(item.Title, item.Description, item.HtmlContent)
 		if err != nil {
 			log.Fatal(err)
+			return "", err
 		}
 		log.Print("Done.")
 		fileutil.AppendStringToFile(podcast_fname_txt, summary)
@@ -156,6 +169,7 @@ func (r *rss2podcast) Run() string {
 		fileContent, err := fileutil.ReadFileContent(podcast_fname_txt)
 		if err != nil {
 			log.Fatal(err)
+			return "", err
 		}
 
 		// Generate audio file
@@ -168,5 +182,5 @@ func (r *rss2podcast) Run() string {
 	// Clean up
 	os.Remove("articles.json")
 
-	return podcast_fname_mp3
+	return podcast_fname_mp3, nil
 }

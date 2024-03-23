@@ -1,4 +1,4 @@
-package rss2podcast
+package main
 
 import (
 	rss2podcast "github.com/intothevoid/rss2podcast/internal/app"

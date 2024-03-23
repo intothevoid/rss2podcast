@@ -74,7 +74,7 @@ Coqui TTS is a text-to-speech synthesis system that uses deep learning to create
 Start the container by using the following command:
 
 ```bash
-docker run -d --rm -p 5002:5002 --platform linux/amd64 --entrypoint /usr/local/bin/tts-server ghcr.io/coqui-ai/tts-cpu
+docker run -d -p 5002:5002 --platform linux/amd64 --entrypoint /usr/local/bin/tts-server ghcr.io/coqui-ai/tts-cpu --model_name tts_models/en/ljspeech/vits
 ```
 
 ## Installation 

@@ -29,3 +29,4 @@ cmd/.DS_Store
 cmd/rss2podcast/.DS_Store
 cmd/rss2podcast/rss2podcast
 .DS_Store
+*.mp3

@@ -1,9 +1,7 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
-	"os/exec"
 
 	"github.com/gorilla/mux"
 	rss2podcast "github.com/intothevoid/rss2podcast/internal/app"
@@ -22,27 +20,16 @@ func GenerateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Set the topic for the podcast
+	app.SetTopic(topic)
+
 	// Generate the .mp3 file using the topic
-	app.Run()
-	// if err != nil {
-	// 	http.Error(w, "Failed to generate .mp3 file", http.StatusInternalServerError)
-	// 	return
-	// }
-
-	// Serve the generated .mp3 file
-	http.ServeFile(w, r, "generated.mp3")
-}
-
-// generateMP3 generates a .mp3 file using the given topic.
-func generateMP3(topic string) error {
-	// TODO: Implement the logic to generate the .mp3 file using the topic.
-	// You can use any external libraries or APIs to generate the .mp3 file.
-	// Here's an example using the `say` command on macOS:
-	cmd := exec.Command("say", "-o", "generated.mp3", topic)
-	err := cmd.Run()
+	generatedMp3, err := app.Run()
 	if err != nil {
-		return fmt.Errorf("failed to generate .mp3 file: %w", err)
+		http.Error(w, "Failed to generate .mp3 file", http.StatusInternalServerError)
+		return
 	}
 
-	return nil
+	// Serve the generated .mp3 file
+	http.ServeFile(w, r, generatedMp3)
 }

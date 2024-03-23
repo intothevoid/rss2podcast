@@ -1,4 +1,4 @@
-package websvc
+package main
 
 import (
 	"github.com/intothevoid/rss2podcast/internal/api"
