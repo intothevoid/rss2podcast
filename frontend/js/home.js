@@ -35,8 +35,8 @@ function generateRSS() {
   disableUI();
   showSpinner();
 
-  // Send GET request to the specified URL
-  fetch(url)
+  // Send GET request to the specified URL with cache disabled
+  fetch(url, { cache: 'no-store' })
     .then(response => response.blob())
     .then(blob => {
       // Create a URL for the blob object
