@@ -40,10 +40,13 @@
       <input type="text" id="rss-url" class="textbox" placeholder="Enter Podcast Topic" style="margin-right: 5px;">
       <button onclick="generateRSS()" class="generate-button bg-blue-500 text-white" id="generate-button"
         style="padding-left: 5px; padding-right: 5px; margin-right: 5px;">Generate</button>
-      <div class="loader" id="spinner"></div> 
+      <div class="loader" id="spinner"></div>
     </div>
 
-    <div class="download-div text-center" style="padding: 20px" id="download-url"></div>
+    <div class="flex flex-col items-center justify-center text-center" style="padding: 20px" id="download-div"></div>
+      <div class="download-media" style="padding: 20px" id="download-media"></div>
+      <div class="download-url" style="padding: 20px" id="download-url"></div>
+    </div>
 
     <footer class="text-xs flex justify-center text-gray-400" style="padding-top: 50px;">
       <p>&copy; 2024 Karan Kadam. All rights reserved.</p>
@@ -54,4 +57,3 @@
 </body>
 
 </html>
-

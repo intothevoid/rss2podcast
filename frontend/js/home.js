@@ -30,7 +30,7 @@ function loadTopic(rssUrl) {
 function generateRSS() {
   var topic = document.getElementById("rss-url").value;
   var url = "http://localhost:8080/generate/" + topic;
-  
+
   // Disable UI elements
   disableUI();
   showSpinner();
@@ -42,15 +42,27 @@ function generateRSS() {
       // Create a URL for the blob object
       const fileUrl = URL.createObjectURL(blob);
 
-      // Create a hyperlink element
-      const link = document.createElement('a');
-      link.href = fileUrl;
-      link.download = 'podcast.mp3';
-      link.textContent = 'Download';
+      // Create a hyperlink element for downloading
+      const downloadLink = document.createElement('a');
+      downloadLink.href = fileUrl;
+      downloadLink.download = 'podcast.mp3';
+      downloadLink.textContent = 'Download';
 
-      // Append the hyperlink to the home page
-      const downloadDiv = document.getElementById('download-url');
-      downloadDiv.appendChild(link);
+      // Create an audio element for playing
+      const audio = document.createElement('audio');
+      audio.src = fileUrl;
+      audio.controls = true;
+
+      // Wrap the audio element in a div and apply Tailwind CSS classes to center it
+      const audioWrapper = document.createElement('div');
+      audioWrapper.className = 'flex justify-center';
+      audioWrapper.appendChild(audio);
+
+      // Create a div to hold the download and play links
+      const downloadDiv = document.getElementById('download-div');
+      downloadDiv.innerHTML = '';
+      downloadDiv.appendChild(audioWrapper);
+      downloadDiv.appendChild(downloadLink);
 
       // Enable UI elements
       enableUI();
@@ -68,14 +80,14 @@ function generateRSS() {
 function disableUI() {
   document.getElementById('rss-url').style.display = 'none';
   document.getElementById('generate-button').style.display = 'none';
-  document.getElementById('download-url').style.display = 'none';
+  document.getElementById('download-div').style.display = 'none';
 }
 
 // Function to enable all UI elements
 function enableUI() {
   document.getElementById('rss-url').style.display = 'block';
   document.getElementById('generate-button').style.display = 'block';
-  document.getElementById('download-url').style.display = 'block';
+  document.getElementById('download-div').style.display = 'block';
 }
 
 // Function to show spinner
