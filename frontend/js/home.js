@@ -35,3 +35,38 @@ function loadTopic(rssUrl) {
   const textbox = document.getElementById('rss-url');
   textbox.value = rssUrl;
 }
+
+// Handle generate button functionality
+function generateRSS() {
+  var topic = document.getElementById("rss-url").value;
+  var url = "http://localhost:8080/generate/" + topic;
+
+  // Send GET request to the specified URL
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response data here
+      console.log(data);
+    })
+    .catch(error => {
+      // Handle any errors here
+      console.error(error);
+    });
+}
+
+// Function to disable all UI elements
+function disableUI() {
+  document.getElementById('rss-url').disabled = true;
+  document.getElementById('generate-button').disabled = true;
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('rss-feed').style.display = 'none';
+}
+
+// Function to enable all UI elements
+function enableUI() {
+  document.getElementById('rss-url').disabled = false;
+  document.getElementById('generate-button').disabled = false;
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('rss-feed').style.display = 'block';
+}
+

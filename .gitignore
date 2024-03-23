@@ -28,5 +28,7 @@ articles.json
 cmd/.DS_Store
 cmd/rss2podcast/.DS_Store
 cmd/rss2podcast/rss2podcast
+cmd/websvc/websvc
+cmd/websvc/websvc/.DS_Store
 .DS_Store
 *.mp3

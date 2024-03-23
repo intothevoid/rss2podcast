@@ -1,6 +1,6 @@
 # rss2podcast
 
-<img src="resources/logo.jpg" width=200px height=200px></img>
+<img src="resources/ui.jpg" width=800px height=600px></img>
 
 A locally hosted, AI generated podcast from an rss feed. 
 
