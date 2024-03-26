@@ -7,9 +7,16 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-// Function which accepts a URL and returns the HTML content of the page
+// Scrape retrieves the content of a web page specified by the given URL.
+// It returns the extracted text from paragraph tags in the HTML document.
 func Scrape(url string) string {
-	resp, err := http.Get(url)
+	client := &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return nil // This allows redirects to be followed automatically
+		},
+	}
+
+	resp, err := client.Get(url)
 	if err != nil {
 		log.Fatal(err)
 		return ""
