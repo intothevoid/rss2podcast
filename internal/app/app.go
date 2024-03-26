@@ -113,8 +113,8 @@ func (r *rss2podcast) Run() (string, error) {
 	r.topic = url.QueryEscape(r.topic)
 
 	// Set RSS feed URL to Google News search for topic
-	// r.cfg.RSS.URL = fmt.Sprintf("https://flipboard.com/topic/%s.rss", r.topic)
-	r.cfg.RSS.URL = fmt.Sprintf("https://news.google.com/rss/search?q=%s", r.topic)
+	r.cfg.RSS.URL = fmt.Sprintf("https://flipboard.com/topic/%s.rss", r.topic)
+	// r.cfg.RSS.URL = fmt.Sprintf("https://news.google.com/rss/search?q=%s", r.topic)
 
 	// podcast filename
 	// get timestamp as string in format yymmhh_hhmm
