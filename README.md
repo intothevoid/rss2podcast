@@ -5,6 +5,10 @@
 A locally hosted, AI generated podcast from an rss feed. 
 
 ![workflow](https://github.com/intothevoid/rss2podcast/actions/workflows/go.yml/badge.svg)
+![Go Report Card](https://goreportcard.com/badge/github.com/intothevoid/rss2podcast)
+![GitHub](https://img.shields.io/github/license/intothevoid/rss2podcast)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/intothevoid/rss2podcast)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/intothevoid/rss2podcast)
 
 Powered by -
 
