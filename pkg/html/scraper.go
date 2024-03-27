@@ -18,7 +18,7 @@ func Scrape(url string) string {
 
 	resp, err := client.Get(url)
 	if err != nil {
-		log.Fatal(err)
+		log.Default().Println(err)
 		return ""
 	}
 	defer resp.Body.Close()
@@ -26,7 +26,8 @@ func Scrape(url string) string {
 	// Parse the HTML document
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Default().Print(err)
+		return ""
 	}
 
 	// Extract text from paragraph tags

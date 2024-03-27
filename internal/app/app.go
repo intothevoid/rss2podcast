@@ -133,8 +133,8 @@ func (r *rss2podcast) Run() (string, error) {
 	if !r.noParse {
 		// Generate podcast introduction
 		introduction := "Welcome to the " + r.cfg.Podcast.Subject + " podcast. I'm your host, " +
-			r.cfg.Podcast.Podcaster + ". This is an AI generated podcast based on an RSS source feed. " +
-			". Let's get started."
+			r.cfg.Podcast.Podcaster + ". This is an AI podcast generated from information on the internet. " +
+			"Thank you for tuning in."
 
 		log.Println("Generating podcast introduction...")
 		fileutil.AppendStringToFile(podcast_fname_txt, introduction)
