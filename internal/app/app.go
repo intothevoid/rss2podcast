@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"sort"
 	"time"
 
 	"github.com/intothevoid/rss2podcast/internal/config"
@@ -141,6 +142,11 @@ func (r *rss2podcast) Run() (string, error) {
 
 		// Parse RSS feed
 		items, _ := r.rssParser.ParseURL(r.cfg.RSS.URL)
+
+		// Sort by publication date to keep the most recent articles first
+		sort.Slice(items, func(i, j int) bool {
+			return items[i].PublishedParsed.After(*items[j].PublishedParsed)
+		})
 
 		// Store top 'maxArticles' articles, default to 10
 		for i, item := range items {
