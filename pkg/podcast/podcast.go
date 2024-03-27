@@ -22,8 +22,8 @@ func NewPodcast(ol llm.LLM) Podcast {
 }
 
 func (pod *podcast) GenerateSummary(title string, description string, content string) (string, error) {
-	retval, err := pod.ollama.SendRequest(fmt.Sprintf("Create a narrative / story from the following"+
-		"Title: %s. Description: %s, Content: %s."+
+	retval, err := pod.ollama.SendRequest(fmt.Sprintf("Create a narrative / story by summarising from the following"+
+		"Title: %s. Description: %s, Content: %s. Try to keep the summary under 30 seconds."+
 		// "Summarise as if it will be read by a podcast host. Do not add any introductions. Only focus on content."+
 		"Note: The response should be written in a professional tone and should not include any personal opinions or biases."+
 		"It should be based solely on the information provided in the title, description and content. Do not use emojis.", title, description, content))
