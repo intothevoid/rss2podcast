@@ -4,9 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
+
+	"github.com/intothevoid/rss2podcast/internal/config"
 )
 
-type Config struct {
+type ConfigWebSvc struct {
 	Subject        string `json:"subject"`
 	Podcaster      string `json:"podcaster"`
 	TtsUrl         string `json:"tts_url"`
@@ -31,30 +34,41 @@ func ConfigureHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check if the Content-Type is application/json
-	// w.Header().Set("Content-Type", "application/json")
-	// ct := r.Header.Get("Content-Type")
-	// if ct != "" {
-	// 	mediaType := strings.ToLower(strings.TrimSpace(strings.Split(ct, ";")[0]))
-	// 	if mediaType != "application/json" {
-	// 		http.Error(w, "Content-Type header is not application/json", http.StatusUnsupportedMediaType)
-	// 		return
-	// 	}
-	// }
-
-	var config Config
-	err := json.NewDecoder(r.Body).Decode(&config)
+	var confIncoming ConfigWebSvc
+	err := json.NewDecoder(r.Body).Decode(&confIncoming)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if err := checkIfConfigExists(config.Subject, config.Podcaster,
-		config.TtsUrl, config.RssMaxArticles, config.OllamaEndPoint,
-		config.OllamaModel); err != nil {
+	if err := checkIfConfigExists(confIncoming.Subject, confIncoming.Podcaster,
+		confIncoming.TtsUrl, confIncoming.RssMaxArticles, confIncoming.OllamaEndPoint,
+		confIncoming.OllamaModel); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	} else {
+		conf, err := config.LoadConfig()
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Update the config
+		conf.Podcast.Subject = confIncoming.Subject
+		conf.Podcast.Podcaster = confIncoming.Podcaster
+		conf.TTS.URL = confIncoming.TtsUrl
+
+		maxArticles, err := strconv.Atoi(confIncoming.RssMaxArticles)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		conf.RSS.MaxArticles = maxArticles
+		conf.Ollama.EndPoint = confIncoming.OllamaEndPoint
+		conf.Ollama.Model = confIncoming.OllamaModel
+		config.WriteConfig(conf)
 		w.WriteHeader(http.StatusOK)
 	}
 }

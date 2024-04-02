@@ -25,6 +25,10 @@ type Config struct {
 	} `yaml:"tts"`
 }
 
+// LoadConfig loads the configuration from a YAML file.
+// If the environment variable RSS2PODCAST_CONFIG is set, it will use the value as the path to the configuration file.
+// Otherwise, it will default to "config.yaml" in the current directory.
+// It returns a pointer to the loaded Config struct and any error encountered during the loading process.
 func LoadConfig() (*Config, error) {
 	configPath := os.Getenv("RSS2PODCAST_CONFIG")
 	if configPath == "" {
@@ -45,4 +49,27 @@ func LoadConfig() (*Config, error) {
 	}
 
 	return &cfg, nil
+}
+
+// WriteConfig writes the provided configuration to a file.
+// The configuration is encoded as YAML and saved to the file specified by the RSS2PODCAST_CONFIG environment variable.
+// If the environment variable is not set, the configuration is saved to a file named "config.yaml" in the current directory.
+// The function returns an error if there was a problem creating or writing to the file.
+func WriteConfig(config *Config) error {
+	configPath := os.Getenv("RSS2PODCAST_CONFIG")
+	if configPath == "" {
+		configPath = "config.yaml" // default to current directory
+	}
+
+	f, err := os.Create(configPath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	encoder := yaml.NewEncoder(f)
+	err = encoder.Encode(config)
+	if err != nil {
+		return err
+	}
+	return nil
 }
