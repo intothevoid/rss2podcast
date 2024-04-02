@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 )
 
 type Converter struct {
@@ -51,28 +52,37 @@ func (c *Converter) ConvertToAudio(content string, fileName string) error {
 	req.Header.Set("Cache-Control", "max-age=0")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-	// Send the request using the default client
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Printf("Error sending request: %s\n", err)
-		return err
-	}
-	defer resp.Body.Close()
+	// Retry logic
+	retries := 0
+	maxRetries := 60 // 5 mins (60 retries * 5 seconds)
+	for retries < maxRetries {
+		// Send the request using the default client
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			fmt.Printf("Error sending request: %s\n", err)
+			retries++
+			time.Sleep(5 * time.Second) // Retry after 5 seconds
+			continue
+		}
+		defer resp.Body.Close()
 
-	// Read and print the response body
-	body, err := io.ReadAll(io.Reader(resp.Body))
-	if err != nil {
-		fmt.Printf("Error reading response body: %s\n", err)
-		return err
+		// Read and print the response body
+		body, err := io.ReadAll(io.Reader(resp.Body))
+		if err != nil {
+			fmt.Printf("Error reading response body: %s\n", err)
+			return err
+		}
+
+		// Save the response body to a file
+		err = os.WriteFile(fileName, body, fs.FileMode(0644))
+		if err != nil {
+			fmt.Printf("Error writing to file: %s\n", err)
+			return err
+		}
+
+		return nil
 	}
 
-	// Save the response body to a file
-	err = os.WriteFile(fileName, body, fs.FileMode(0644))
-	if err != nil {
-		fmt.Printf("Error writing to file: %s\n", err)
-		return err
-	}
-
-	return nil
+	return fmt.Errorf("request failed after %d retries", maxRetries)
 }
