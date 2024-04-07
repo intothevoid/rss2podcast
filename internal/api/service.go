@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -18,12 +17,5 @@ func StartWebService() {
 	// Route for setting the configuration of the application i.e config.yaml
 	router.HandleFunc("/configure/", handler.ConfigureHandler).Methods("POST")
 
-	// Test handler
-	router.HandleFunc("/test/", TestHandler).Methods("GET")
-
 	log.Fatal(http.ListenAndServe(":8080", router))
-}
-
-func TestHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Test handler reached")
 }
