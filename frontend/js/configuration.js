@@ -4,21 +4,37 @@
 // Handle save configuration button click
 function saveConfig() {
     // Get the configuration values from the input field
-    var subject = document.getElementById('subject').value;
-    var podcaster = document.getElementById('podcaster').value;
-    var rssMaxArticles = document.getElementById('rss_max_articles').value;
-    var ollamaEndpoint = document.getElementById('ollama_end_point').value;
-    var ollamaModel = document.getElementById('ollama_model').value;
-    var ttsUrl = document.getElementById('tts_url').value;
+    const subject = document.getElementById('subject').value;
+    const podcaster = document.getElementById('podcaster').value;
+    const rssMaxArticles = document.getElementById('rss_max_articles').value;
+    const ollamaEndpoint = document.getElementById('ollama_end_point').value;
+    const ollamaModel = document.getElementById('ollama_model').value;
+    const ttsEngine = document.getElementById('tts_engine').value;
+    const coquiUrl = document.getElementById('coqui_url').value;
+    const kokoroUrl = document.getElementById('kokoro_url').value;
+    const kokoroVoice = document.getElementById('kokoro_voice').value;
+    const kokoroSpeed = document.getElementById('kokoro_speed').value;
+    const kokoroFormat = document.getElementById('kokoro_format').value;
 
     // Add the configuration values to the object
-    var config = {
+    const config = {
         "subject": subject,
         "podcaster": podcaster,
         "rss_max_articles": rssMaxArticles,
         "ollama_endpoint": ollamaEndpoint,
         "ollama_model": ollamaModel,
-        "tts_url": ttsUrl
+        "tts": {
+            "engine": ttsEngine,
+            "coqui": {
+                "url": coquiUrl
+            },
+            "kokoro": {
+                "url": kokoroUrl,
+                "voice": kokoroVoice,
+                "speed": parseFloat(kokoroSpeed),
+                "format": kokoroFormat
+            }
+        }
     };
 
     // Create a POST request to the server
@@ -31,7 +47,7 @@ function saveConfig() {
         headers: {
             'Content-Type': 'text/plain',
         },
-        body: JSON.stringify(config) // Directly stringify the config object
+        body: JSON.stringify(config)
     })
         .then(response => response.json())
         .then(data => {
@@ -47,3 +63,25 @@ function saveConfig() {
             console.error(error);
         });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listener for TTS engine selection
+    document.getElementById('tts_engine').addEventListener('change', function() {
+        const coquiContainer = document.getElementById('coqui_url_container');
+        const kokoroContainer = document.getElementById('kokoro_url_container');
+        
+        if (this.value === 'coqui') {
+            coquiContainer.style.display = 'block';
+            kokoroContainer.style.display = 'none';
+        } else if (this.value === 'kokoro') {
+            coquiContainer.style.display = 'none';
+            kokoroContainer.style.display = 'block';
+        } else {
+            coquiContainer.style.display = 'none';
+            kokoroContainer.style.display = 'none';
+        }
+    });
+
+    // Trigger the change event to set initial state
+    document.getElementById('tts_engine').dispatchEvent(new Event('change'));
+});
