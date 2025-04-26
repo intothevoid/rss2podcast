@@ -211,8 +211,14 @@ func (r *rss2podcast) Run() (string, error) {
 	}
 
 	// Convert podcast text to audio
-	if !r.noConvert && !r.noSummary {
+	if !r.noConvert {
 		log.Println("Converting podcast text to audio...")
+		// Check if the text file exists before attempting to read it
+		if _, err := os.Stat(podcast_fname_txt); os.IsNotExist(err) {
+			log.Printf("Text file %s does not exist. Skipping audio conversion.", podcast_fname_txt)
+			return "", fmt.Errorf("text file %s does not exist", podcast_fname_txt)
+		}
+
 		fileContent, err := fileutil.ReadFileContent(podcast_fname_txt)
 		if err != nil {
 			log.Fatal(err)
@@ -225,7 +231,7 @@ func (r *rss2podcast) Run() (string, error) {
 		// Convert audio file to mp3
 		audio.ConvertWavToMp3(podcast_fname_wav, podcast_fname_mp3)
 	} else {
-		log.Println("Skipping audio conversion. --noConvert or --noSummary was passed.")
+		log.Println("Skipping audio conversion. --noConvert was passed.")
 	}
 
 	return podcast_fname_mp3, nil
