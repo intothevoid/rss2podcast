@@ -37,9 +37,23 @@ func TestConverter_ConvertToAudio(t *testing.T) {
 	}))
 	defer server.Close()
 
+	// Create config structs
+	coquiConfig := &ConverterConfig{
+		URL: server.URL,
+	}
+
+	kokoroConfig := &ConverterConfig{
+		URL:    "",
+		Voice:  "af_heart",
+		Speed:  1.0,
+		Format: "mp3",
+	}
+
 	// Create a Converter instance with the test server URL
 	converter := &Converter{
-		baseURL: server.URL,
+		engine: "coqui",
+		coqui:  NewCoquiConverter(coquiConfig),
+		kokoro: NewKokoroConverter(kokoroConfig),
 	}
 
 	// Call the method being tested

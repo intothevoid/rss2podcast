@@ -16,6 +16,9 @@ type ConfigWebSvc struct {
 	RssMaxArticles string `json:"rss_max_articles"`
 	OllamaEndPoint string `json:"ollama_endpoint"`
 	OllamaModel    string `json:"ollama_model"`
+	TtsEngine      string `json:"tts_engine"`
+	CoquiUrl       string `json:"coqui_url"`
+	KokoroUrl      string `json:"kokoro_url"`
 }
 
 func enableCORS(w *http.ResponseWriter) {
@@ -57,7 +60,9 @@ func ConfigureHandler(w http.ResponseWriter, r *http.Request) {
 		// Update the config
 		conf.Podcast.Subject = confIncoming.Subject
 		conf.Podcast.Podcaster = confIncoming.Podcaster
-		conf.TTS.URL = confIncoming.TtsUrl
+		conf.TTS.Engine = confIncoming.TtsEngine
+		conf.TTS.Coqui.URL = confIncoming.CoquiUrl
+		conf.TTS.Kokoro.URL = confIncoming.KokoroUrl
 
 		maxArticles, err := strconv.Atoi(confIncoming.RssMaxArticles)
 		if err != nil {

@@ -21,7 +21,16 @@ type Config struct {
 		Podcaster string `yaml:"podcaster"`
 	} `yaml:"podcast"`
 	TTS struct {
-		URL string `yaml:"url"`
+		Engine string `yaml:"engine"` // "coqui" or "kokoro"
+		Coqui  struct {
+			URL string `yaml:"url"`
+		} `yaml:"coqui"`
+		Kokoro struct {
+			URL    string  `yaml:"url"`
+			Voice  string  `yaml:"voice"`
+			Speed  float64 `yaml:"speed"`
+			Format string  `yaml:"format"`
+		} `yaml:"kokoro"`
 	} `yaml:"tts"`
 }
 

@@ -49,7 +49,19 @@ func NewRSS2Podcast() *rss2podcast {
 	store := store.NewStore()
 	ollama := llm.NewOllama(cfg.Ollama.EndPoint, cfg.Ollama.Model)
 	podcast := podcast.NewPodcast(ollama)
-	converter := tts.NewConverter(cfg.TTS.URL)
+
+	coquiConfig := &tts.ConverterConfig{
+		URL: cfg.TTS.Coqui.URL,
+	}
+
+	kokoroConfig := &tts.ConverterConfig{
+		URL:    cfg.TTS.Kokoro.URL,
+		Voice:  cfg.TTS.Kokoro.Voice,
+		Speed:  cfg.TTS.Kokoro.Speed,
+		Format: cfg.TTS.Kokoro.Format,
+	}
+
+	converter := tts.NewConverter(cfg.TTS.Engine, coquiConfig, kokoroConfig)
 	writer := io.NewJsonWriter(store)
 
 	// Check command line arguments
@@ -79,7 +91,7 @@ func NewRSS2Podcast() *rss2podcast {
 		noConnectionCheck: noConnectionCheck,
 		noParse:           noParse,
 		noConvert:         noConvert,
-		topic:             "default", //default topic
+		topic:             "news", //default topic
 	}
 }
 
