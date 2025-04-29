@@ -162,9 +162,9 @@ The application can be configured through the web interface or by editing the `c
 - Installation and setup instructions: [Coqui TTS Documentation](https://github.com/coqui-ai/TTS)
 
 #### Kokoro TTS
-- Requires a running instance of Kokoro TTS server
-- Default URL: http://localhost:8880/api/tts
-- Installation and setup instructions: [Kokoro TTS Documentation](https://github.com/nazdridoy/kokoro-tts)
+- Requires a running instance of Kokoro TTS FastAPIserver
+- Default URL: http://localhost:8880/docs
+- Installation and setup instructions: [Kokoro TTS Fast API](https://github.com/remsky/Kokoro-FastAPI)
 
 ## Contributing
 Contributions are welcome. Please open a pull request with your changes.
