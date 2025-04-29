@@ -69,6 +69,30 @@ sudo apt update
 sudo apt install ffmpeg
 ```
 
+### Kokoro TTS (Recommended)
+
+Kokoro TTS is a text-to-speech synthesis system that uses deep learning to create human-like speech from text. You can install the Kokoro TTS server by following the instructions on the [official website](https://github.com/nazdridoy/kokoro-tts).
+
+#### Docker:
+  
+Create a docker-compose.yml file and add the following:
+
+```yaml
+services:
+kokoro-fastapi-cpu:
+    ports:
+        - 8880:8880
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:v0.2.2
+```
+
+Start the server by running the following command:
+
+```bash
+docker compose up -d
+```
+
+This will start the Kokoro TTS server on port 8880. The server provides a REST API for text-to-speech conversion.
+
 ### Coqui TTS
 
 Coqui TTS is a text-to-speech synthesis system that uses deep learning to create human-like speech from text. You can install the Coqui TTS server by following the instructions on the [official website](https://coqui.ai/tts).
@@ -140,25 +164,6 @@ The application can be configured through the web interface or by editing the `c
 - Requires a running instance of Kokoro TTS server
 - Default URL: http://localhost:8880/api/tts
 - Installation and setup instructions: [Kokoro TTS Documentation](https://github.com/nazdridoy/kokoro-tts)
-- Docker setup:
-  
-  Create a docker-compose.yml file and add the following:
-
-  ```yaml
-  services:
-    kokoro-fastapi-cpu:
-        ports:
-            - 8880:8880
-        image: ghcr.io/remsky/kokoro-fastapi-cpu:v0.2.2
-  ```
-
-  Start the server by running the following command:
-
-  ```bash
-  docker compose up -d
-  ```
-
-  This will start the Kokoro TTS server on port 8880. The server provides a REST API for text-to-speech conversion.
 
 ## Contributing
 Contributions are welcome. Please open a pull request with your changes.
