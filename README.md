@@ -82,7 +82,7 @@ services:
 kokoro-fastapi-cpu:
     ports:
         - 8880:8880
-    image: ghcr.io/remsky/kokoro-fastapi-cpu:v0.2.2
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:latest # or v0.2.3 for last stable version
 ```
 
 Start the server by running the following command:

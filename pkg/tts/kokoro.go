@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type KokoroConverter struct {
@@ -24,9 +25,11 @@ type KokoroRequest struct {
 	Input              string  `json:"input"`
 	Voice              string  `json:"voice"`
 	ResponseFormat     string  `json:"response_format"`
+	DownloadFormat     *string `json:"download_format,omitempty"`
 	Speed              float64 `json:"speed"`
 	Stream             bool    `json:"stream"`
 	ReturnDownloadLink bool    `json:"return_download_link"`
+	LangCode           *string `json:"lang_code,omitempty"`
 }
 
 // ConvertToAudio sends a POST request to the Kokoro TTS API and saves the response as an audio file.
@@ -48,8 +51,11 @@ func (c *KokoroConverter) ConvertToAudio(content string, fileName string) error 
 		return fmt.Errorf("error marshaling payload: %v", err)
 	}
 
+	// Ensure the URL ends with a slash
+	baseURL := strings.TrimRight(c.config.URL, "/")
+
 	// Create a new request
-	req, err := http.NewRequest("POST", c.config.URL+"/v1/audio/speech", bytes.NewBuffer(payloadBytes))
+	req, err := http.NewRequest("POST", baseURL+"/v1/audio/speech", bytes.NewBuffer(payloadBytes))
 	if err != nil {
 		return fmt.Errorf("error creating request: %v", err)
 	}
@@ -68,19 +74,25 @@ func (c *KokoroConverter) ConvertToAudio(content string, fileName string) error 
 
 	// Check the response status
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(body))
 	}
 
 	// Get the download link from headers if available
 	downloadPath := resp.Header.Get("X-Download-Path")
 	if downloadPath != "" {
 		// Download the file from the provided path
-		downloadURL := c.config.URL + downloadPath
+		downloadURL := baseURL + downloadPath
 		downloadResp, err := http.Get(downloadURL)
 		if err != nil {
 			return fmt.Errorf("error downloading audio file: %v", err)
 		}
 		defer downloadResp.Body.Close()
+
+		if downloadResp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(downloadResp.Body)
+			return fmt.Errorf("unexpected status code when downloading: %d, body: %s", downloadResp.StatusCode, string(body))
+		}
 
 		// Create the output file
 		outFile, err := os.Create(fileName)
