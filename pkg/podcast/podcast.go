@@ -22,12 +22,42 @@ func NewPodcast(ol llm.LLM) Podcast {
 }
 
 func (pod *podcast) GenerateSummary(title string, description string, content string) (string, error) {
-	retval, err := pod.ollama.SendRequest(fmt.Sprintf("Using the following"+
-		"Title: %s. Description: %s, Content: %s, generate a 2 minute summary."+
-		"The summary should only contain the content of the article, no introductions or conclusions."+
-		"The summary should not contain any other text like [Music], [Sound], [Silence], etc. Only the content of the article."+
-		"The summary should be written in a professional tone and should not include any personal opinions or biases."+
-		"It should be based solely on the information provided in the title, description and content. Do not use emojis.", title, description, content))
+	// retval, err := pod.ollama.SendRequest(fmt.Sprintf("Using the following"+
+	// 	"Title: %s. Description: %s, Content: %s, to generate an approximately 2 minute factual, conscise summary that can be read in a podcast."+
+	// 	"Focus exclusively on the core facts and key information from the article"+
+	// 	"The summary should be written in a professional tone and should not include any personal opinions or biases."+
+	// 	"Maintain a neutral, objective tone"+
+	// 	"Use clear, straightforward language suitable for audio presentation"+
+	// 	"Preserve the original meaning and context of the article"+
+	// 	"Include only information present in the source article"+
+	// 	"Avoid adding any commentary, opinions, or transitions not found in the original text"+
+	// 	"Avoid introductory or concluding phrases like 'In this article...' or 'That concludes our summary...'"+
+	// 	"Simply provide the summary text with no additional framing, explanations, or meta-commentary."+
+	// 	"It should be based solely on the information provided in the title, description and content. Do not use emojis.", title, description, content))
+
+	const podcastSummaryPrompt = `Your task is to transform the following title:%s, description:%s, content:%s into a concise summary that a human podcast host can read verbatim.
+		IMPORTANT: Generate ONLY the plain summary text with NO additional elements whatsoever:
+
+		NO introductions (like "Here's a summary...")
+		NO headings (like "Summary:")
+		NO sound effect instructions (like "Sound of musical transition")
+		NO meta-commentary about the article
+		NO phrases like "the article states/details/mentions"
+		NO formatting markers or special characters
+		NO conclusions or sign-offs
+
+		The summary should:
+
+		Be 200-350 words in length
+		Use natural, conversational language appropriate for verbal delivery
+		Present only factual information from the original article
+		Be written in the first person as if the podcaster is directly sharing the news
+		Flow as a coherent, stand-alone piece that needs no introduction or conclusion
+
+		Begin the summary immediately without any preamble and end it without any closing remarks.`
+
+	retval, err := pod.ollama.SendRequest(fmt.Sprintf(podcastSummaryPrompt, title, description, content))
+
 	if err != nil {
 		return "", fmt.Errorf("error sending request: %v", err)
 	}

@@ -156,13 +156,12 @@ func (r *rss2podcast) Run() (string, error) {
 
 	if !r.noParse {
 		// Generate podcast introduction
-		introduction := "Welcome to the " + r.cfg.Podcast.Subject + " podcast. I'm your host, " +
+		introduction := "Hello! Welcome to the " + r.cfg.Podcast.Subject + " podcast. I'm your host, " +
 			r.cfg.Podcast.Podcaster + ". This is an AI podcast generated from information on the internet. " +
 			"Thanks for tuning in."
 
 		log.Println("Generating podcast introduction...")
-		fileutil.AppendStringToFile(podcast_fname_txt, introduction)
-
+		fileutil.FlushStringToFile(podcast_fname_txt, introduction)
 		// Parse RSS feed
 		items, _ := r.rssParser.ParseURL(r.cfg.RSS.URL)
 
@@ -197,6 +196,9 @@ func (r *rss2podcast) Run() (string, error) {
 	}
 
 	if !r.noSummary {
+		// Buffer to store summaries in memory
+		summaryBuffer := make(map[string]string)
+
 		// Summarize articles
 		for _, item := range r.store.GetData() {
 			log.Printf("Summarizing article - %s", item.Title)
@@ -206,8 +208,9 @@ func (r *rss2podcast) Run() (string, error) {
 				return "", err
 			}
 			log.Print("Done.")
-			fileutil.AppendStringToFile(podcast_fname_txt, summary)
+			summaryBuffer[item.Title] = summary
 		}
+		fileutil.FlushMapToFile(podcast_fname_txt, summaryBuffer)
 	}
 
 	// Convert podcast text to audio

@@ -9,7 +9,7 @@ rss:
     - "Weekly"
 ollama:
   end_point: "http://localhost:11434/api/generate"
-  model: "gemma3:1b"
+  model: "mistral:latest"
 tts:
   engine: "kokoro"  # Options: "coqui" or "kokoro"
   coqui:
