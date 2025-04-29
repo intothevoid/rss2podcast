@@ -15,6 +15,7 @@ Powered by -
 <img src="resources/rss.png" width=80px height=80px></img>
 <img src="resources/ollama.png" width=80px height=80px></img>
 <img src="resources/coqui.png" width=80px height=80px></img>
+<img src="resources/kokoro.jpg" width=80px height=80px></img>
 
 ## How it works
 The application reads an rss feed, extracts the articles and summarises them. 
@@ -69,6 +70,30 @@ sudo apt update
 sudo apt install ffmpeg
 ```
 
+### Kokoro TTS (Recommended)
+
+Kokoro TTS is a text-to-speech synthesis system that uses deep learning to create human-like speech from text. You can install the Kokoro TTS server by following the instructions on the [official website](https://github.com/nazdridoy/kokoro-tts).
+
+#### Docker:
+  
+Create a docker-compose.yml file and add the following:
+
+```yaml
+services:
+kokoro-fastapi-cpu:
+    ports:
+        - 8880:8880
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:latest # or v0.2.3 for last stable version
+```
+
+Start the server by running the following command:
+
+```bash
+docker compose up -d
+```
+
+This will start the Kokoro TTS server on port 8880. The server provides a REST API for text-to-speech conversion.
+
 ### Coqui TTS
 
 Coqui TTS is a text-to-speech synthesis system that uses deep learning to create human-like speech from text. You can install the Coqui TTS server by following the instructions on the [official website](https://coqui.ai/tts).
@@ -109,51 +134,37 @@ go test ./...
 
 ## Configuration
 
-The application's configuration is stored in a `config.yaml` file. Here's what each section does:
+The application can be configured through the web interface or by editing the `config.yaml` file directly. The configuration options include:
 
-### Podcast
+### Podcast Settings
+- `subject`: The topic or subject of your podcast
+- `podcaster`: The name of the podcaster
 
-This section contains information about the podcast.
+### RSS Feed Settings
+- `url`: The RSS feed URL to fetch content from
+- `max_articles`: Maximum number of articles to process
+- `filters`: List of keywords to filter out unwanted articles
 
-```yaml
-podcast:
-  subject: "News" # The subject of the podcast
-  podcaster: "Cody" # The name of the podcaster
-```
+### Ollama Settings
+- `end_point`: The Ollama API endpoint
+- `model`: The Ollama model to use for text generation
 
-### RSS
+### TTS Settings
+- `engine`: The TTS engine to use ("coqui" or "kokoro")
+- `coqui.url`: The URL for the Coqui TTS service
+- `kokoro.url`: The URL for the Kokoro TTS service
 
-This section contains information about the RSS feed.
+### TTS Requirements
 
-```yaml
-rss:
-  url: "https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best" # The URL of the RSS feed
-  max_articles: 10 # The maximum number of articles to fetch from the RSS feed
-  filters: # Keywords to filter articles by
-    - "Daily"
-    - "Weekly"
-```
+#### Coqui TTS
+- Requires a running instance of Coqui TTS server
+- Default URL: http://localhost:5002/api/tts
+- Installation and setup instructions: [Coqui TTS Documentation](https://github.com/coqui-ai/TTS)
 
-### Ollama
-
-This section contains information about the Ollama service.
-
-```yaml
-ollama:
-  end_point: "http://localhost:11434/api/generate" # The URL of the Ollama service
-  model: "mistral:7b" # The model used by the Ollama service
-```
-
-### TTS
-
-This section contains information about the Text-to-Speech (TTS) service.
-
-```yaml
-tts:
-  url: "http://localhost:5002/api/tts" # The URL of the TTS service
-```
-
-You can modify these values to suit your needs. Remember to restart the application after making changes to the configuration file.
+#### Kokoro TTS
+- Requires a running instance of Kokoro TTS FastAPIserver
+- Default URL: http://localhost:8880/docs
+- Installation and setup instructions: [Kokoro TTS Fast API](https://github.com/remsky/Kokoro-FastAPI)
 
 ## Contributing
 Contributions are welcome. Please open a pull request with your changes.
