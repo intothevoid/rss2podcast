@@ -15,7 +15,7 @@ func StartWebService() {
 	router.HandleFunc("/generate/{topic}", handler.GenerateHandler).Methods("GET")
 
 	// Route for setting the configuration of the application i.e config.yaml
-	router.HandleFunc("/configure/", handler.ConfigureHandler).Methods("POST")
+	router.HandleFunc("/configure/", handler.ConfigureHandler).Methods("POST", "OPTIONS")
 
 	log.Println("Starting web service on port 8080")
 

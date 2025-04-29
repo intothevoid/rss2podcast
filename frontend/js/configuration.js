@@ -3,68 +3,92 @@
 
 // Handle save configuration button click
 function saveConfig() {
-    // Get the configuration values from the input field
-    const subject = document.getElementById('subject').value;
-    const podcaster = document.getElementById('podcaster').value;
-    const rssMaxArticles = document.getElementById('rss_max_articles').value;
-    const ollamaEndpoint = document.getElementById('ollama_end_point').value;
-    const ollamaModel = document.getElementById('ollama_model').value;
-    const ttsEngine = document.getElementById('tts_engine').value;
-    const coquiUrl = document.getElementById('coqui_url').value;
-    const kokoroUrl = document.getElementById('kokoro_url').value;
-    const kokoroVoice = document.getElementById('kokoro_voice').value;
-    const kokoroSpeed = document.getElementById('kokoro_speed').value;
-    const kokoroFormat = document.getElementById('kokoro_format').value;
-
-    // Add the configuration values to the object
+    console.log('Starting configuration save...');
+    
     const config = {
-        "subject": subject,
-        "podcaster": podcaster,
-        "rss_max_articles": rssMaxArticles,
-        "ollama_endpoint": ollamaEndpoint,
-        "ollama_model": ollamaModel,
-        "tts": {
-            "engine": ttsEngine,
-            "coqui": {
-                "url": coquiUrl
-            },
-            "kokoro": {
-                "url": kokoroUrl,
-                "voice": kokoroVoice,
-                "speed": parseFloat(kokoroSpeed),
-                "format": kokoroFormat
-            }
-        }
+        subject: document.getElementById('subject').value,
+        podcaster: document.getElementById('podcaster').value,
+        rss_max_articles: document.getElementById('rss_max_articles').value,
+        ollama_endpoint: document.getElementById('ollama_end_point').value,
+        ollama_model: document.getElementById('ollama_model').value,
+        tts_engine: document.getElementById('tts_engine').value,
+        coqui_url: document.getElementById('coqui_url').value,
+        kokoro_url: document.getElementById('kokoro_url').value,
+        kokoro_voice: document.getElementById('kokoro_voice').value,
+        kokoro_speed: document.getElementById('kokoro_speed').value,
+        kokoro_format: document.getElementById('kokoro_format').value
     };
 
-    // Create a POST request to the server
-    var url = "http://localhost:8080/configure/";
+    console.log('Sending configuration:', config);
 
-    // Send POST request to the specified URL with cache disabled
-    fetch(url, { 
-        method: "POST", 
-        mode: 'no-cors',
+    fetch('http://localhost:8080/configure/', {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'omit',
         headers: {
-            'Content-Type': 'text/plain',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
         },
         body: JSON.stringify(config)
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Configuration saved")
+    .then(response => {
+        console.log('Response received:', response);
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        if (!response.ok) {
+            return response.text().then(text => {
+                console.error('Server error response:', text);
+                throw new Error(text || `HTTP error! status: ${response.status}`);
+            });
+        }
+        return response.text();
+    })
+    .then(text => {
+        console.log('Success response text:', text);
+        try {
+            const data = JSON.parse(text);
+            console.log('Parsed response:', data);
+            alert(data.message || 'Configuration saved successfully!');
+        } catch (e) {
+            console.log('Raw response (not JSON):', text);
+            alert('Configuration saved successfully!');
+        }
+    })
+    .catch(error => {
+        console.error('Detailed error:', error);
+        console.error('Error stack:', error.stack);
+        
+        if (!window.navigator.onLine) {
+            alert('You are offline. Please check your internet connection.');
+            return;
+        }
 
-            // Add div to the page with success message
-            var div = document.createElement('div');
-            div.innerHTML = "Configuration saved";
-            document.body.appendChild(div);
-        })
-        .catch(error => {
-            // Handle any errors here
-            console.error(error);
-        });
+        if (error.message.includes('Failed to fetch')) {
+            alert('Cannot connect to the server. Please ensure the server is running at http://localhost:8080');
+        } else {
+            alert('Error saving configuration: ' + error.message);
+        }
+    });
 }
 
+// Add event listener for page load
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Configuration page loaded');
+    
+    // Test server connectivity
+    fetch('http://localhost:8080/configure/', {
+        method: 'OPTIONS',
+        mode: 'cors',
+        credentials: 'omit'
+    })
+    .then(response => {
+        console.log('Server is reachable, OPTIONS response:', response);
+    })
+    .catch(error => {
+        console.error('Server connectivity test failed:', error);
+    });
+
     // Add event listener for TTS engine selection
     document.getElementById('tts_engine').addEventListener('change', function() {
         const coquiContainer = document.getElementById('coqui_url_container');
