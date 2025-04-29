@@ -89,8 +89,12 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Server connectivity test failed:', error);
     });
 
+    // Set kokoro as default TTS engine
+    const ttsEngineSelect = document.getElementById('tts_engine');
+    ttsEngineSelect.value = 'kokoro';
+
     // Add event listener for TTS engine selection
-    document.getElementById('tts_engine').addEventListener('change', function() {
+    ttsEngineSelect.addEventListener('change', function() {
         const coquiContainer = document.getElementById('coqui_url_container');
         const kokoroContainer = document.getElementById('kokoro_url_container');
         
@@ -107,5 +111,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Trigger the change event to set initial state
-    document.getElementById('tts_engine').dispatchEvent(new Event('change'));
+    ttsEngineSelect.dispatchEvent(new Event('change'));
 });

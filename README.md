@@ -15,6 +15,7 @@ Powered by -
 <img src="resources/rss.png" width=80px height=80px></img>
 <img src="resources/ollama.png" width=80px height=80px></img>
 <img src="resources/coqui.png" width=80px height=80px></img>
+<img src="resources/kokoro.jpg" width=80px height=80px></img>
 
 ## How it works
 The application reads an rss feed, extracts the articles and summarises them. 
