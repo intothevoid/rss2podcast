@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -140,9 +142,25 @@ func (r *rss2podcast) Run() (string, error) {
 	r.cfg.RSS.URL = fmt.Sprintf("https://flipboard.com/topic/%s.rss", r.cfg.Podcast.Subject)
 	// r.cfg.RSS.URL = fmt.Sprintf("https://news.google.com/rss/search?q=%s", r.topic)
 
+	// Find existing txt file if --no-parse is set
+	var existingTxtFile string
+	if r.noParse {
+		files, err := filepath.Glob(fmt.Sprintf("%s_summary_*.txt", r.cfg.Podcast.Subject))
+		if err == nil && len(files) > 0 {
+			existingTxtFile = files[0]
+		}
+	}
+
 	// podcast filename
 	// get timestamp as string in format yymmhh_hhmm
 	ts := time.Now().Local().Format("2006_01_02_1504")
+	if existingTxtFile != "" {
+		// Extract timestamp from existing file
+		re := regexp.MustCompile(`_(\d{4}_\d{2}_\d{2}_\d{4})\.txt$`)
+		if matches := re.FindStringSubmatch(existingTxtFile); len(matches) > 1 {
+			ts = matches[1]
+		}
+	}
 	podcast_fname_txt := fmt.Sprintf("%s_summary_%s.txt", r.cfg.Podcast.Subject, ts)
 	podcast_fname_wav := fmt.Sprintf("%s_summary_%s.wav", r.cfg.Podcast.Subject, ts)
 	podcast_fname_mp3 := fmt.Sprintf("%s_summary_%s.mp3", r.cfg.Podcast.Subject, ts)
@@ -161,6 +179,7 @@ func (r *rss2podcast) Run() (string, error) {
 			"Thanks for tuning in."
 
 		log.Println("Generating podcast introduction...")
+		log.Printf("Writing introduction to file: %s", podcast_fname_txt)
 		fileutil.FlushStringToFile(podcast_fname_txt, introduction)
 		// Parse RSS feed
 		items, _ := r.rssParser.ParseURL(r.cfg.RSS.URL)
@@ -210,6 +229,7 @@ func (r *rss2podcast) Run() (string, error) {
 			log.Print("Done.")
 			summaryBuffer[item.Title] = summary
 		}
+		log.Printf("Writing summaries to file: %s", podcast_fname_txt)
 		fileutil.FlushMapToFile(podcast_fname_txt, summaryBuffer)
 	}
 

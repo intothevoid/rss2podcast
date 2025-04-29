@@ -22,19 +22,6 @@ func NewPodcast(ol llm.LLM) Podcast {
 }
 
 func (pod *podcast) GenerateSummary(title string, description string, content string) (string, error) {
-	// retval, err := pod.ollama.SendRequest(fmt.Sprintf("Using the following"+
-	// 	"Title: %s. Description: %s, Content: %s, to generate an approximately 2 minute factual, conscise summary that can be read in a podcast."+
-	// 	"Focus exclusively on the core facts and key information from the article"+
-	// 	"The summary should be written in a professional tone and should not include any personal opinions or biases."+
-	// 	"Maintain a neutral, objective tone"+
-	// 	"Use clear, straightforward language suitable for audio presentation"+
-	// 	"Preserve the original meaning and context of the article"+
-	// 	"Include only information present in the source article"+
-	// 	"Avoid adding any commentary, opinions, or transitions not found in the original text"+
-	// 	"Avoid introductory or concluding phrases like 'In this article...' or 'That concludes our summary...'"+
-	// 	"Simply provide the summary text with no additional framing, explanations, or meta-commentary."+
-	// 	"It should be based solely on the information provided in the title, description and content. Do not use emojis.", title, description, content))
-
 	const podcastSummaryPrompt = `Your task is to transform the following title:%s, description:%s, content:%s into a concise summary that a human podcast host can read verbatim.
 		IMPORTANT: Generate ONLY the plain summary text with NO additional elements whatsoever:
 
