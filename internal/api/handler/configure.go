@@ -24,6 +24,10 @@ type ConfigWebSvc struct {
 	KokoroVoice    string `json:"kokoro_voice"`
 	KokoroSpeed    string `json:"kokoro_speed"`
 	KokoroFormat   string `json:"kokoro_format"`
+	MLXUrl         string `json:"mlx_url"`
+	MLXVoice       string `json:"mlx_voice"`
+	MLXSpeed       string `json:"mlx_speed"`
+	MLXFormat      string `json:"mlx_format"`
 }
 
 func enableCORS(w *http.ResponseWriter) {
@@ -124,14 +128,27 @@ func ConfigureHandler(w http.ResponseWriter, r *http.Request) {
 	conf.TTS.Kokoro.URL = confIncoming.KokoroUrl
 	conf.TTS.Kokoro.Voice = confIncoming.KokoroVoice
 
-	// Convert speed string to float64
+	// Convert speed string to float64 for Kokoro
 	if speed, err := strconv.ParseFloat(confIncoming.KokoroSpeed, 64); err == nil {
 		conf.TTS.Kokoro.Speed = speed
 	} else {
-		log.Printf("Warning: Invalid speed value '%s', using default", confIncoming.KokoroSpeed)
+		log.Printf("Warning: Invalid Kokoro speed value '%s', using default", confIncoming.KokoroSpeed)
 	}
 
 	conf.TTS.Kokoro.Format = confIncoming.KokoroFormat
+
+	// Update MLX configuration
+	conf.TTS.MLX.URL = confIncoming.MLXUrl
+	conf.TTS.MLX.Voice = confIncoming.MLXVoice
+
+	// Convert speed string to float64 for MLX
+	if speed, err := strconv.ParseFloat(confIncoming.MLXSpeed, 64); err == nil {
+		conf.TTS.MLX.Speed = speed
+	} else {
+		log.Printf("Warning: Invalid MLX speed value '%s', using default", confIncoming.MLXSpeed)
+	}
+
+	conf.TTS.MLX.Format = confIncoming.MLXFormat
 
 	maxArticles, err := strconv.Atoi(confIncoming.RssMaxArticles)
 	if err != nil {

@@ -11,11 +11,16 @@ podcast:
   subject: News
   podcaster: Cody
 tts:
-  engine: kokoro
+  engine: mlx
   coqui:
     url: http://localhost:5002/api/tts
   kokoro:
     url: http://localhost:8880
+    voice: bm_george
+    speed: 1
+    format: mp3
+  mlx:
+    url: http://localhost:8000
     voice: bm_george
     speed: 1.2
     format: mp3

@@ -65,7 +65,14 @@ func NewRSS2Podcast() *rss2podcast {
 		Format: cfg.TTS.Kokoro.Format,
 	}
 
-	converter := tts.NewConverter(cfg.TTS.Engine, coquiConfig, kokoroConfig)
+	mlxConfig := &tts.ConverterConfig{
+		URL:    cfg.TTS.MLX.URL,
+		Voice:  cfg.TTS.MLX.Voice,
+		Speed:  cfg.TTS.MLX.Speed,
+		Format: cfg.TTS.MLX.Format,
+	}
+
+	converter := tts.NewConverter(cfg.TTS.Engine, coquiConfig, kokoroConfig, mlxConfig)
 	writer := io.NewJsonWriter(store)
 
 	// Check command line arguments

@@ -16,59 +16,36 @@ function saveConfig() {
         kokoro_url: document.getElementById('kokoro_url').value,
         kokoro_voice: document.getElementById('kokoro_voice').value,
         kokoro_speed: document.getElementById('kokoro_speed').value,
-        kokoro_format: document.getElementById('kokoro_format').value
+        kokoro_format: document.getElementById('kokoro_format').value,
+        mlx_url: document.getElementById('mlx_url').value,
+        mlx_voice: document.getElementById('mlx_voice').value,
+        mlx_speed: document.getElementById('mlx_speed').value,
+        mlx_format: document.getElementById('mlx_format').value
     };
 
     console.log('Sending configuration:', config);
 
+    // Send the configuration to the server
     fetch('http://localhost:8080/configure/', {
         method: 'POST',
-        mode: 'cors',
-        credentials: 'omit',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
         },
         body: JSON.stringify(config)
     })
     .then(response => {
-        console.log('Response received:', response);
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
-        
         if (!response.ok) {
-            return response.text().then(text => {
-                console.error('Server error response:', text);
-                throw new Error(text || `HTTP error! status: ${response.status}`);
-            });
+            throw new Error('Network response was not ok');
         }
-        return response.text();
+        return response.json();
     })
-    .then(text => {
-        console.log('Success response text:', text);
-        try {
-            const data = JSON.parse(text);
-            console.log('Parsed response:', data);
-            alert(data.message || 'Configuration saved successfully!');
-        } catch (e) {
-            console.log('Raw response (not JSON):', text);
-            alert('Configuration saved successfully!');
-        }
+    .then(data => {
+        console.log('Configuration saved successfully:', data);
+        alert('Configuration saved successfully!');
     })
     .catch(error => {
-        console.error('Detailed error:', error);
-        console.error('Error stack:', error.stack);
-        
-        if (!window.navigator.onLine) {
-            alert('You are offline. Please check your internet connection.');
-            return;
-        }
-
-        if (error.message.includes('Failed to fetch')) {
-            alert('Cannot connect to the server. Please ensure the server is running at http://localhost:8080');
-        } else {
-            alert('Error saving configuration: ' + error.message);
-        }
+        console.error('Error saving configuration:', error);
+        alert('Error saving configuration: ' + error.message);
     });
 }
 
@@ -97,16 +74,24 @@ document.addEventListener('DOMContentLoaded', function() {
     ttsEngineSelect.addEventListener('change', function() {
         const coquiContainer = document.getElementById('coqui_url_container');
         const kokoroContainer = document.getElementById('kokoro_url_container');
+        const mlxContainer = document.getElementById('mlx_url_container');
         
         if (this.value === 'coqui') {
             coquiContainer.style.display = 'block';
             kokoroContainer.style.display = 'none';
+            mlxContainer.style.display = 'none';
         } else if (this.value === 'kokoro') {
             coquiContainer.style.display = 'none';
             kokoroContainer.style.display = 'block';
+            mlxContainer.style.display = 'none';
+        } else if (this.value === 'mlx') {
+            coquiContainer.style.display = 'none';
+            kokoroContainer.style.display = 'none';
+            mlxContainer.style.display = 'block';
         } else {
             coquiContainer.style.display = 'none';
             kokoroContainer.style.display = 'none';
+            mlxContainer.style.display = 'none';
         }
     });
 

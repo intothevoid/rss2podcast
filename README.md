@@ -17,6 +17,112 @@ Powered by -
 <img src="resources/coqui.png" width=80px height=80px></img>
 <img src="resources/kokoro.jpg" width=80px height=80px></img>
 
+## Features
+
+- RSS feed parsing and article extraction
+- Article summarization using Ollama
+- Text-to-speech conversion using multiple engines:
+  - Kokoro TTS (Recommended)
+  - MLX Audio TTS
+  - Coqui TTS
+- Podcast generation with customizable settings
+- Web interface for configuration and control
+
+## Requirements
+
+- Go 1.21 or later
+- Ollama (for article summarization)
+- One of the following TTS engines:
+  - Kokoro TTS (recommended)
+  - MLX Audio TTS
+  - Coqui TTS
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/intothevoid/rss2podcast.git
+cd rss2podcast
+```
+
+2. Install dependencies:
+```bash
+go mod download
+```
+
+3. Configure the application by editing `config.yaml` or using the web interface.
+
+## Configuration
+
+The application can be configured using the web interface or by editing the `config.yaml` file. The following settings are available:
+
+### RSS Settings
+- `url`: The RSS feed URL to parse
+- `max_articles`: Maximum number of articles to process
+- `filters`: List of filters to apply to articles
+
+### Ollama Settings
+- `end_point`: The Ollama API endpoint
+- `model`: The Ollama model to use for summarization
+
+### Podcast Settings
+- `subject`: The podcast subject
+- `podcaster`: The podcaster name
+
+### TTS Settings
+- `engine`: The TTS engine to use ("kokoro", "mlx", or "coqui")
+- `kokoro`: Kokoro TTS settings
+  - `url`: The Kokoro TTS API endpoint
+  - `voice`: The voice to use
+  - `speed`: The speech speed (0.25 to 4.0)
+  - `format`: The audio format (mp3, opus, flac, wav, pcm)
+- `mlx`: MLX Audio TTS settings
+  - `url`: The MLX Audio TTS API endpoint
+  - `voice`: The voice to use
+  - `speed`: The speech speed (0.5 to 2.0)
+  - `format`: The audio format (mp3, wav)
+- `coqui`: Coqui TTS settings
+  - `url`: The Coqui TTS API endpoint
+
+## Usage
+
+1. Start the application:
+```bash
+go run cmd/rss2podcast/main.go
+```
+
+2. Access the web interface at `http://localhost:8080`
+
+3. Configure the application using the web interface or edit `config.yaml`
+
+4. The application will:
+   - Parse the RSS feed
+   - Extract and summarize articles
+   - Convert the summary to audio using the selected TTS engine
+   - Generate a podcast file
+
+## TTS Engines
+
+### Kokoro TTS (Recommended)
+Kokoro TTS offers OpenAI-compatible speech synthesis with support for multiple voices and formats. It provides excellent quality with low latency.
+
+### MLX Audio TTS
+MLX Audio TTS is a powerful text-to-speech engine that provides high-quality speech synthesis with support for multiple voices and formats. It offers additional features like direct audio playback and output folder management.
+
+### Coqui TTS
+Coqui TTS provides high-quality speech synthesis with support for multiple voices and formats.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [Ollama](https://ollama.ai/) for the LLM API
+- [Kokoro TTS](https://github.com/kokoro-tts/kokoro) for the TTS engine
+- [MLX Audio TTS](https://github.com/mlx-audio/mlx-tts) for the TTS engine
+- [Coqui TTS](https://github.com/coqui-ai/TTS) for the TTS engine
+
 ## How it works
 The application reads an rss feed, extracts the articles and summarises them. 
 
@@ -106,68 +212,8 @@ Start the container by using the following command:
 docker run -d -p 5002:5002 --platform linux/amd64 --entrypoint /usr/local/bin/tts-server ghcr.io/coqui-ai/tts-cpu --model_name tts_models/en/ljspeech/vits
 ```
 
-## Installation 
-
-Clone the repository and navigate into the directory:
-
-```bash 
-    git clone https://github.com/yourusername/your-repo.git
-    cd your-repo
-```
-
-Then, install the dependencies:
-```bash
-go mod download
-```
-
-## Usage
-To run the application, navigate to the cmd/rss2podcast directory and run:
-```bash
-go run main.go
-```
-
 ## Testing
 To run the tests, use the following command:
 ```bash
 go test ./...
 ```
-
-## Configuration
-
-The application can be configured through the web interface or by editing the `config.yaml` file directly. The configuration options include:
-
-### Podcast Settings
-- `subject`: The topic or subject of your podcast
-- `podcaster`: The name of the podcaster
-
-### RSS Feed Settings
-- `url`: The RSS feed URL to fetch content from
-- `max_articles`: Maximum number of articles to process
-- `filters`: List of keywords to filter out unwanted articles
-
-### Ollama Settings
-- `end_point`: The Ollama API endpoint
-- `model`: The Ollama model to use for text generation
-
-### TTS Settings
-- `engine`: The TTS engine to use ("coqui" or "kokoro")
-- `coqui.url`: The URL for the Coqui TTS service
-- `kokoro.url`: The URL for the Kokoro TTS service
-
-### TTS Requirements
-
-#### Coqui TTS
-- Requires a running instance of Coqui TTS server
-- Default URL: http://localhost:5002/api/tts
-- Installation and setup instructions: [Coqui TTS Documentation](https://github.com/coqui-ai/TTS)
-
-#### Kokoro TTS
-- Requires a running instance of Kokoro TTS FastAPIserver
-- Default URL: http://localhost:8880/docs
-- Installation and setup instructions: [Kokoro TTS Fast API](https://github.com/remsky/Kokoro-FastAPI)
-
-## Contributing
-Contributions are welcome. Please open a pull request with your changes.
-
-## License
-This project is licensed under the terms of the MIT License.
