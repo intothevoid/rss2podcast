@@ -46,17 +46,34 @@ func (s *Store) GetData() map[string]rss.RSSItem {
 // Function to iterate over the data and populate the RSSItem.HtmlContent field
 // with the HTML content of the article scraped from the URL
 func (s *Store) PopulateHtmlContent() {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	type update struct {
+		key   string
+		value rss.RSSItem
+	}
+
+	updates := make(chan update, len(s.data))
 	wg := sync.WaitGroup{}
+
+	// Launch goroutines to scrape content
 	for key, item := range s.data {
-		// Scrape the HTML content of the article
 		wg.Add(1)
-		go func(item *rss.RSSItem) {
+		go func(key string, item rss.RSSItem) {
 			defer wg.Done()
 			item.HtmlContent = html.Scrape(item.Url)
-			s.data[key] = *item
-		}(&item)
+			updates <- update{key: key, value: item}
+		}(key, item)
 	}
-	wg.Wait()
+
+	// Wait for all scraping to complete
+	go func() {
+		wg.Wait()
+		close(updates)
+	}()
+
+	// Apply updates to the map
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for update := range updates {
+		s.data[update.key] = update.value
+	}
 }

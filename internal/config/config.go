@@ -21,7 +21,7 @@ type Config struct {
 		Podcaster string `yaml:"podcaster"`
 	} `yaml:"podcast"`
 	TTS struct {
-		Engine string `yaml:"engine"` // "coqui" or "kokoro"
+		Engine string `yaml:"engine"` // "coqui", "kokoro", or "mlx"
 		Coqui  struct {
 			URL string `yaml:"url"`
 		} `yaml:"coqui"`
@@ -31,6 +31,12 @@ type Config struct {
 			Speed  float64 `yaml:"speed"`
 			Format string  `yaml:"format"`
 		} `yaml:"kokoro"`
+		MLX struct {
+			URL    string  `yaml:"url"`
+			Voice  string  `yaml:"voice"`
+			Speed  float64 `yaml:"speed"`
+			Format string  `yaml:"format"`
+		} `yaml:"mlx"`
 	} `yaml:"tts"`
 }
 

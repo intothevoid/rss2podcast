@@ -1,21 +1,26 @@
-podcast:
-  subject: "News"
-  podcaster: "Cody"
 rss:
-  url: "https://news.google.com/rss/search?q=australia"
-  max_articles: 15
+  url: https://news.google.com/rss/search?q=australia
+  max_articles: 10
   filters:
-    - "Daily"
-    - "Weekly"
+  - Daily
+  - Weekly
 ollama:
-  end_point: "http://localhost:11434/api/generate"
-  model: "mistral:latest"
+  end_point: http://localhost:11434/api/generate
+  model: mistral:7b
+podcast:
+  subject: News
+  podcaster: Cody
 tts:
-  engine: "kokoro"  # Options: "coqui" or "kokoro"
+  engine: mlx
   coqui:
-    url: "http://localhost:5002/api/tts"
+    url: http://localhost:5002/api/tts
   kokoro:
-    url: "http://localhost:8880"
-    voice: "bm_george"  # Default voice, options: af_heart, en_heart, etc.
-    speed: 1.0  # Range: 0.25 to 4.0
-    format: "mp3"  # Options: mp3, opus, flac, wav, pcm
+    url: http://localhost:8880
+    voice: bm_george
+    speed: 1
+    format: mp3
+  mlx:
+    url: http://localhost:8000
+    voice: bm_george
+    speed: 1.2
+    format: mp3

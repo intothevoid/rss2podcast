@@ -55,6 +55,7 @@
       <select id="tts_engine" class="form-control" onchange="updateTtsUrlVisibility()">
         <option value="coqui">Coqui</option>
         <option value="kokoro">Kokoro</option>
+        <option value="mlx">MLX Audio</option>
       </select>
     </div>
 
@@ -70,7 +71,72 @@
       <label for="kokoro_voice">Voice:</label>
       <select id="kokoro_voice" class="form-control">
         <option value="bm_george">bm_george</option>
-        <option value="en_heart">en_heart</option>
+        <option value="af_alloy">af_alloy</option>
+        <option value="af_aoede">af_aoede</option>
+        <option value="af_bella">af_bella</option>
+        <option value="af_heart">af_heart</option>
+        <option value="af_jadzia">af_jadzia</option>
+        <option value="af_jessica">af_jessica</option>
+        <option value="af_kore">af_kore</option>
+        <option value="af_nicole">af_nicole</option>
+        <option value="af_nova">af_nova</option>
+        <option value="af_river">af_river</option>
+        <option value="af_sarah">af_sarah</option>
+        <option value="af_sky">af_sky</option>
+        <option value="af_v0">af_v0</option>
+        <option value="af_v0bella">af_v0bella</option>
+        <option value="af_v0irulan">af_v0irulan</option>
+        <option value="af_v0nicole">af_v0nicole</option>
+        <option value="af_v0sarah">af_v0sarah</option>
+        <option value="af_v0sky">af_v0sky</option>
+        <option value="am_adam">am_adam</option>
+        <option value="am_echo">am_echo</option>
+        <option value="am_eric">am_eric</option>
+        <option value="am_fenrir">am_fenrir</option>
+        <option value="am_liam">am_liam</option>
+        <option value="am_michael">am_michael</option>
+        <option value="am_onyx">am_onyx</option>
+        <option value="am_puck">am_puck</option>
+        <option value="am_santa">am_santa</option>
+        <option value="am_v0adam">am_v0adam</option>
+        <option value="am_v0gurney">am_v0gurney</option>
+        <option value="am_v0michael">am_v0michael</option>
+        <option value="bf_alice">bf_alice</option>
+        <option value="bf_emma">bf_emma</option>
+        <option value="bf_lily">bf_lily</option>
+        <option value="bf_v0emma">bf_v0emma</option>
+        <option value="bf_v0isabella">bf_v0isabella</option>
+        <option value="bm_daniel">bm_daniel</option>
+        <option value="bm_fable">bm_fable</option>
+        <option value="bm_lewis">bm_lewis</option>
+        <option value="bm_v0george">bm_v0george</option>
+        <option value="bm_v0lewis">bm_v0lewis</option>
+        <option value="ef_dora">ef_dora</option>
+        <option value="em_alex">em_alex</option>
+        <option value="em_santa">em_santa</option>
+        <option value="ff_siwis">ff_siwis</option>
+        <option value="hf_alpha">hf_alpha</option>
+        <option value="hf_beta">hf_beta</option>
+        <option value="hm_omega">hm_omega</option>
+        <option value="hm_psi">hm_psi</option>
+        <option value="if_sara">if_sara</option>
+        <option value="im_nicola">im_nicola</option>
+        <option value="jf_alpha">jf_alpha</option>
+        <option value="jf_gongitsune">jf_gongitsune</option>
+        <option value="jf_nezumi">jf_nezumi</option>
+        <option value="jf_tebukuro">jf_tebukuro</option>
+        <option value="jm_kumo">jm_kumo</option>
+        <option value="pf_dora">pf_dora</option>
+        <option value="pm_alex">pm_alex</option>
+        <option value="pm_santa">pm_santa</option>
+        <option value="zf_xiaobei">zf_xiaobei</option>
+        <option value="zf_xiaoni">zf_xiaoni</option>
+        <option value="zf_xiaoxiao">zf_xiaoxiao</option>
+        <option value="zf_xiaoyi">zf_xiaoyi</option>
+        <option value="zm_yunjian">zm_yunjian</option>
+        <option value="zm_yunxi">zm_yunxi</option>
+        <option value="zm_yunxia">zm_yunxia</option>
+        <option value="zm_yunyang">zm_yunyang</option>
       </select>
 
       <label for="kokoro_speed">Speed:</label>
@@ -83,6 +149,29 @@
         <option value="flac">FLAC</option>
         <option value="wav">WAV</option>
         <option value="pcm">PCM</option>
+      </select>
+    </div>
+
+    <div id="mlx_url_container" class="form-group" style="display: none;">
+      <label for="mlx_url">MLX Audio TTS URL:</label>
+      <input type="text" id="mlx_url" class="form-control" value="http://localhost:8000">
+      
+      <label for="mlx_voice">Voice:</label>
+      <select id="mlx_voice" class="form-control">
+        <option value="af_heart">af_heart</option>
+        <option value="bm_george">bm_george</option>
+        <option value="af_alloy">af_alloy</option>
+        <option value="af_aoede">af_aoede</option>
+        <option value="af_bella">af_bella</option>
+      </select>
+
+      <label for="mlx_speed">Speed:</label>
+      <input type="number" id="mlx_speed" class="form-control" value="1.0" min="0.5" max="2.0" step="0.1">
+
+      <label for="mlx_format">Format:</label>
+      <select id="mlx_format" class="form-control">
+        <option value="mp3">MP3</option>
+        <option value="wav">WAV</option>
       </select>
     </div>
 
@@ -102,6 +191,7 @@
       const engine = document.getElementById('tts_engine').value;
       document.getElementById('coqui_url_container').style.display = engine === 'coqui' ? 'block' : 'none';
       document.getElementById('kokoro_url_container').style.display = engine === 'kokoro' ? 'block' : 'none';
+      document.getElementById('mlx_url_container').style.display = engine === 'mlx' ? 'block' : 'none';
     }
 
     // Call on page load to set initial visibility
