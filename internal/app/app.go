@@ -39,6 +39,7 @@ type rss2podcast struct {
 	noConvert         bool
 	noSummary         bool
 	topic             string
+	topics            []string
 }
 
 func NewRSS2Podcast() *rss2podcast {
@@ -80,8 +81,10 @@ func NewRSS2Podcast() *rss2podcast {
 	noConvert := false
 	noConnectionCheck := false
 	noSummary := false
+	var topics []string
 
-	for _, arg := range os.Args[1:] {
+	for i := 1; i < len(os.Args); i++ {
+		arg := os.Args[i]
 		switch arg {
 		case "--no-parse":
 			noParse = true
@@ -91,6 +94,14 @@ func NewRSS2Podcast() *rss2podcast {
 			noConnectionCheck = true
 		case "--no-summary":
 			noSummary = true
+		case "--topics":
+			if i+1 < len(os.Args) {
+				topics = strings.Split(os.Args[i+1], ",")
+				for i, topic := range topics {
+					topics[i] = strings.TrimSpace(topic)
+				}
+				i++ // Skip the next argument since we've processed it
+			}
 		}
 	}
 
@@ -107,6 +118,7 @@ func NewRSS2Podcast() *rss2podcast {
 		noConvert:         noConvert,
 		noSummary:         noSummary,
 		topic:             "default", //default topic
+		topics:            topics,
 	}
 }
 
@@ -119,6 +131,25 @@ func (r *rss2podcast) GetTopic() string {
 }
 
 func (r *rss2podcast) Run() (string, error) {
+	// Move old mp3 files to an archive folder
+	fileutil.MoveFilesToArchiveFolder(".", []string{".mp3"})
+
+	if len(r.topics) > 0 {
+		var lastPodcast string
+		for _, topic := range r.topics {
+			r.SetTopic(topic)
+			podcast, err := r.runSingleTopic()
+			if err != nil {
+				return "", err
+			}
+			lastPodcast = podcast
+		}
+		return lastPodcast, nil
+	}
+	return r.runSingleTopic()
+}
+
+func (r *rss2podcast) runSingleTopic() (string, error) {
 	// Check ollama connection
 	if !r.noConnectionCheck {
 		log.Println("Checking connection to Ollama...")
@@ -131,10 +162,10 @@ func (r *rss2podcast) Run() (string, error) {
 
 	// Clean up old files, .txt, .wav, .mp3, .json only if not --noParse
 	if !r.noParse {
-		fileutil.CleanupFolder(".", []string{".txt", ".wav", ".mp3", ".json"})
+		fileutil.CleanupFolder(".", []string{".txt", ".wav", ".json"})
 	} else {
 		// Since we're not parsing, we re-use the old json and txt files
-		fileutil.CleanupFolder(".", []string{".wav", ".mp3"})
+		fileutil.CleanupFolder(".", []string{".wav"})
 	}
 
 	// Set podcast subject to passed in topic if not default
