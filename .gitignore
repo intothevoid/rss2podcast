@@ -32,3 +32,4 @@ cmd/websvc/websvc
 cmd/websvc/websvc/.DS_Store
 .DS_Store
 *.mp3
+archive/

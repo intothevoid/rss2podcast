@@ -212,6 +212,32 @@ Start the container by using the following command:
 docker run -d -p 5002:5002 --platform linux/amd64 --entrypoint /usr/local/bin/tts-server ghcr.io/coqui-ai/tts-cpu --model_name tts_models/en/ljspeech/vits
 ```
 
+### MLX Audio TTS
+
+MLX Audio TTS is a text-to-speech synthesis system that uses deep learning to create human-like speech from text. You can install the MLX Audio TTS server by following the instructions on the [official website](https://github.com/mlx-audio/mlx-tts).
+
+#### Docker
+
+As of this writing, MLX Audio TTS needs to be run locally as Docker does not allow GPU access on Apple Silicon.
+
+```bash
+# Install the package
+pip install mlx-audio
+
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+source venv/bin/activate
+
+# Install the dependencies
+pip install -r requirements.txt
+
+# Run the server
+mlx_audio.server
+```
+rss2podcast will automatically request the MLX Audio TTS server to generate the audio file.
+
 ## Testing
 To run the tests, use the following command:
 ```bash
